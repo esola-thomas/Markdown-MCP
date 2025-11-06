@@ -388,7 +388,8 @@ class TestSearchByTagsTool:
         # Results should be filtered by category
         for result in results:
             if "category" in result:
-                assert result["category"] == "guides"
+                # Category names are title-cased from breadcrumbs
+                assert result["category"] == "Guides"
 
 
 class TestGetDocumentTool:

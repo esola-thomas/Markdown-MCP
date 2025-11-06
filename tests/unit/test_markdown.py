@@ -507,10 +507,12 @@ class TestScanMarkdownFiles:
 
     def test_scan_preserves_directory_structure(self, temp_docs):
         """Test that scanning preserves directory structure in URIs."""
-        (temp_docs / "guides" / "getting-started.md").write_text("# Getting Started")
-        (temp_docs / "guides" / "advanced" / "performance.md").write_text("# Performance")
-
+        # Create directory structure
+        (temp_docs / "guides").mkdir(exist_ok=True)
         (temp_docs / "guides" / "advanced").mkdir(parents=True, exist_ok=True)
+
+        # Create files
+        (temp_docs / "guides" / "getting-started.md").write_text("# Getting Started")
         (temp_docs / "guides" / "advanced" / "performance.md").write_text("# Performance")
 
         documents = scan_markdown_files(temp_docs, temp_docs, recursive=True)

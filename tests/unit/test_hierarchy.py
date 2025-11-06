@@ -392,6 +392,10 @@ class TestGetTableOfContents:
 
     def test_toc_includes_documents(self, sample_documents):
         """Test that TOC includes documents."""
+        # Clear cache to avoid pollution from other tests
+        from hierarchical_docs_mcp.services.cache import get_cache
+        get_cache().clear()
+
         categories = build_category_tree(sample_documents)
         toc = get_table_of_contents(categories, sample_documents)
 

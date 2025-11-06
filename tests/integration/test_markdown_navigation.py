@@ -238,7 +238,7 @@ class TestEndToEndNavigation:
         docs = loaded_documentation["documents"]
 
         # Search for documents with "api" tag
-        results = search_by_metadata(docs, tags=["api"], limit=10)
+        results = search_by_metadata(tags=["api"], documents=docs, limit=10)
 
         # Should find API documents
         assert len(results) > 0
@@ -356,7 +356,8 @@ class TestMCPToolsIntegration:
         # Results should be from API category
         for result in results:
             if "category" in result:
-                assert result["category"] == "api"
+                # Category names are title-cased from breadcrumbs
+                assert result["category"] == "Api"
 
 
 class TestMCPResourcesIntegration:
