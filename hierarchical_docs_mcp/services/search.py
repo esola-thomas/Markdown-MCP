@@ -166,17 +166,11 @@ def search_by_metadata(
     results = []
 
     for doc in documents:
-        matches = False
+        # Use AND logic: document must match ALL specified filters
+        tag_match = not tags or any(tag in doc.tags for tag in tags)
+        cat_match = not category or (doc.category == category or category in doc.uri)
 
-        # Check tags
-        if tags:
-            if any(tag in doc.tags for tag in tags):
-                matches = True
-
-        # Check category
-        if category:
-            if doc.category == category or category in doc.uri:
-                matches = True
+        matches = tag_match and cat_match
 
         if matches:
             breadcrumbs = [crumb["name"] for crumb in get_breadcrumbs(doc.uri)]

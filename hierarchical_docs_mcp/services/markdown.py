@@ -156,8 +156,8 @@ def _extract_title(frontmatter: dict[str, Any], body: str, filename: str) -> str
     if "title" in frontmatter:
         return str(frontmatter["title"])
 
-    # Try first heading in markdown
-    heading_match = re.search(r"^#+\s+(.+)$", body, re.MULTILINE)
+    # Try first h1 heading in markdown (not h2, h3, etc.)
+    heading_match = re.search(r"^#\s+(.+)$", body, re.MULTILINE)
     if heading_match:
         return heading_match.group(1).strip()
 

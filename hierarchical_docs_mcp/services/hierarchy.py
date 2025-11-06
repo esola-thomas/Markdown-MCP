@@ -238,17 +238,20 @@ def _get_category_context(
             "name": name,
         })
 
+    # Determine parent URI
+    parent_uri = category.parent_uri or "docs://"
+
     # Navigation options
     options = {}
-    if category.parent_uri:
-        options["up"] = f"Navigate to parent: {category.parent_uri}"
+    # Always provide "up" option since we can go to parent or root
+    options["up"] = f"Navigate to parent: {parent_uri}"
     if children:
         options["down"] = "Navigate to a child item"
 
     return NavigationContext(
         current_uri=uri,
         current_type="category",
-        parent_uri=category.parent_uri or "docs://",
+        parent_uri=parent_uri,
         breadcrumbs=category.breadcrumbs,
         children=children,
         sibling_count=len(
@@ -367,7 +370,7 @@ def _build_toc_node(
         "children": [],
     }
 
-    # Add child categories
+    # Add child categories only if within max_depth
     if max_depth is None or category.depth + 1 < max_depth:
         for child_uri in category.child_categories:
             if child_uri in categories:
@@ -376,15 +379,16 @@ def _build_toc_node(
                     _build_toc_node(child_cat, categories, documents, max_depth)
                 )
 
-    # Add child documents
-    for doc_uri in category.child_documents:
-        doc = next((d for d in documents if d.uri == doc_uri), None)
-        if doc:
-            node["children"].append({
-                "type": "document",
-                "uri": doc.uri,
-                "name": doc.title,
-                "tags": doc.tags,
-            })
+    # Add child documents only if within max_depth
+    if max_depth is None or category.depth + 1 < max_depth:
+        for doc_uri in category.child_documents:
+            doc = next((d for d in documents if d.uri == doc_uri), None)
+            if doc:
+                node["children"].append({
+                    "type": "document",
+                    "uri": doc.uri,
+                    "name": doc.title,
+                    "tags": doc.tags,
+                })
 
     return node
