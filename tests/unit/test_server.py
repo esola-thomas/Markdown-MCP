@@ -42,10 +42,12 @@ class TestDocumentationMCPServer:
     @pytest.mark.asyncio
     async def test_initialize_loads_documents(self, tmp_path):
         """Test that initialize loads documents from configured sources."""
-        # Create test markdown files
+        # Create test markdown files in a subdirectory to generate categories
         docs_dir = tmp_path / "docs"
         docs_dir.mkdir()
-        (docs_dir / "test.md").write_text("# Test\n\nContent")
+        guides_dir = docs_dir / "guides"
+        guides_dir.mkdir()
+        (guides_dir / "test.md").write_text("# Test\n\nContent")
 
         config = ServerConfig(docs_root=str(docs_dir))
         server = DocumentationMCPServer(config)
