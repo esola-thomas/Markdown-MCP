@@ -74,6 +74,29 @@ Create `.vscode/mcp.json` in your workspace:
 }
 ```
 
+### Try the Example
+
+This repository includes a complete example documentation structure in the [`example/`](example/) folder that you can use to test the MCP server or as a template for your own documentation.
+
+**Quick test:**
+
+```bash
+# Point DOCS_ROOT to the example folder
+export DOCS_ROOT=/path/to/Markdown-MCP/example
+
+# Start the server
+hierarchical-docs-mcp
+```
+
+The example includes:
+- Hierarchical documentation structure with nested categories
+- Markdown files with proper YAML frontmatter
+- Sample API documentation and guides
+- OpenAPI 3.0 specification example
+- Comprehensive README explaining the structure
+
+See the [`example/README.md`](example/README.md) for detailed information about the structure and how to customize it for your project.
+
 ## Usage Examples
 
 ### Ask Your AI Assistant
