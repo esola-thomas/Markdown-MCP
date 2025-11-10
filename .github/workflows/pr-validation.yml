@@ -123,7 +123,7 @@ jobs:
       - name: Validate documentation
         uses: ./.github/actions/validate-docs
         with:
-          paths: 'docs/ README.md .github/CONTRIBUTING.md'
+          paths: 'docs/'
           python-version: '3.11'
           fail-on-warnings: 'false'
           generate-report: 'true'

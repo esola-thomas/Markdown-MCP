@@ -358,13 +358,13 @@ python scripts/validate_docs.py docs/ --no-warnings
 ### Action/Template Not Found
 
 **GitHub Actions:**
-```
+```text
 Error: Unable to resolve action ./.github/actions/validate-docs
 ```
 **Solution:** Ensure the action exists at `.github/actions/validate-docs/action.yml`
 
 **Azure DevOps:**
-```
+```text
 Error: Template file not found: pipelines/templates/validate-docs.yml
 ```
 **Solution:** Ensure the template exists at `pipelines/templates/validate-docs.yml`
@@ -387,7 +387,7 @@ parameters:
 ### Validation Script Not Found
 
 **Problem:**
-```
+```text
 Error: scripts/validate_docs.py not found
 ```
 
