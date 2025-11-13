@@ -40,7 +40,10 @@ class TestAPIOperation:
                 "required": True,
                 "content": {
                     "application/json": {
-                        "schema": {"type": "object", "properties": {"name": {"type": "string"}}}
+                        "schema": {
+                            "type": "object",
+                            "properties": {"name": {"type": "string"}},
+                        }
                     }
                 },
             },
@@ -77,7 +80,9 @@ class TestAPIOperation:
 
     def test_full_description_with_both_summary_and_description(self, detailed_operation):
         """Test full_description property combines summary and description."""
-        expected = "Create a new user\n\nCreates a new user in the system with the provided details."
+        expected = (
+            "Create a new user\n\nCreates a new user in the system with the provided details."
+        )
         assert detailed_operation.full_description == expected
 
     def test_full_description_with_only_summary(self, basic_operation):
@@ -225,7 +230,10 @@ class TestOpenAPISpecification:
             version="3.0.0",
             title="Invalid API",
             validated=False,
-            validation_errors=["Missing required field: paths", "Invalid schema format"],
+            validation_errors=[
+                "Missing required field: paths",
+                "Invalid schema format",
+            ],
         )
 
         assert spec.validated is False

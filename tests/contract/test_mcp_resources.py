@@ -1,6 +1,6 @@
 """Contract tests for MCP resource handlers."""
 
-from datetime import datetime, timedelta, timezone, UTC
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest

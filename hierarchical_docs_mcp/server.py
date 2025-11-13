@@ -1,7 +1,7 @@
 """Main MCP server implementation."""
 
 import json
-from typing import Any
+from typing import Any, cast
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
@@ -194,7 +194,7 @@ class DocumentationMCPServer:
             if "error" in result:
                 raise ValueError(result["error"])
 
-            return result.get("text", "")
+            return cast(str, result.get("text", ""))
 
     async def initialize(self) -> None:
         """Initialize the server by loading documentation."""

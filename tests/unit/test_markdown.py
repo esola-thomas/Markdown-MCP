@@ -276,7 +276,8 @@ class TestParseMarkdownWithMetadata:
     def test_parse_valid_markdown_file(self, temp_docs):
         """Test parsing a valid markdown file."""
         test_file = temp_docs / "guides" / "test.md"
-        test_file.write_text("""---
+        test_file.write_text(
+            """---
 title: Test Guide
 tags: [test, guide]
 category: guides
@@ -285,7 +286,8 @@ order: 1
 
 # Getting Started
 
-This is a test guide.""")
+This is a test guide."""
+        )
 
         doc = parse_markdown_with_metadata(test_file, temp_docs)
 
@@ -300,9 +302,11 @@ This is a test guide.""")
     def test_parse_markdown_without_frontmatter(self, temp_docs):
         """Test parsing markdown without frontmatter."""
         test_file = temp_docs / "guides" / "simple.md"
-        test_file.write_text("""# Simple Document
+        test_file.write_text(
+            """# Simple Document
 
-Content here.""")
+Content here."""
+        )
 
         doc = parse_markdown_with_metadata(test_file, temp_docs)
 
@@ -313,12 +317,14 @@ Content here.""")
     def test_parse_markdown_with_malformed_frontmatter(self, temp_docs):
         """Test parsing markdown with malformed frontmatter."""
         test_file = temp_docs / "guides" / "malformed.md"
-        test_file.write_text("""---
+        test_file.write_text(
+            """---
 title: Test
 broken: [yaml
 ---
 
-# Content""")
+# Content"""
+        )
 
         doc = parse_markdown_with_metadata(test_file, temp_docs)
 
@@ -351,13 +357,15 @@ broken: [yaml
     def test_parse_file_with_unicode_content(self, temp_docs):
         """Test parsing file with Unicode content."""
         test_file = temp_docs / "unicode.md"
-        test_file.write_text("""---
+        test_file.write_text(
+            """---
 title: 中文标题
 ---
 
 # 中文内容
 
-这是中文文档。""")
+这是中文文档。"""
+        )
 
         doc = parse_markdown_with_metadata(test_file, temp_docs)
 
@@ -367,7 +375,8 @@ title: 中文标题
     def test_document_metadata_fields(self, temp_docs):
         """Test that all document metadata fields are populated."""
         test_file = temp_docs / "complete.md"
-        test_file.write_text("""---
+        test_file.write_text(
+            """---
 title: Complete Doc
 tags: [tag1, tag2]
 category: test
@@ -375,7 +384,8 @@ order: 5
 parent: root
 ---
 
-Content""")
+Content"""
+        )
 
         doc = parse_markdown_with_metadata(test_file, temp_docs)
 
@@ -539,14 +549,16 @@ class TestMarkdownEdgeCases:
     def test_markdown_with_code_blocks(self, temp_docs):
         """Test that code blocks are preserved."""
         code_file = temp_docs / "code.md"
-        code_file.write_text("""# Code Example
+        code_file.write_text(
+            """# Code Example
 
 ```python
 def hello():
     print("Hello, World!")
 ```
 
-Text after code.""")
+Text after code."""
+        )
 
         doc = parse_markdown_with_metadata(code_file, temp_docs)
 
@@ -565,12 +577,14 @@ Text after code.""")
     def test_markdown_with_tables(self, temp_docs):
         """Test that markdown tables are preserved."""
         table_file = temp_docs / "table.md"
-        table_file.write_text("""# Table
+        table_file.write_text(
+            """# Table
 
 | Column 1 | Column 2 |
 |----------|----------|
 | Value 1  | Value 2  |
-""")
+"""
+        )
 
         doc = parse_markdown_with_metadata(table_file, temp_docs)
 

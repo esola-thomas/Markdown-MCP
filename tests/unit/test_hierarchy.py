@@ -1,6 +1,6 @@
 """Unit tests for hierarchical navigation and category tree building."""
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
@@ -23,7 +23,7 @@ from hierarchical_docs_mcp.services.hierarchy import (
 @pytest.fixture
 def sample_documents():
     """Create sample documents for testing."""
-    base_time = datetime.now(timezone.utc)
+    base_time = datetime.now(UTC)
 
     return [
         Document(
@@ -162,7 +162,7 @@ class TestBuildCategoryTree:
                 uri="docs://guides/doc1",
                 title="Doc 1",
                 content="Content 1",
-                last_modified=datetime.now(timezone.utc),
+                last_modified=datetime.now(UTC),
                 size_bytes=100,
             ),
             Document(
@@ -171,7 +171,7 @@ class TestBuildCategoryTree:
                 uri="docs://guides/doc2",
                 title="Doc 2",
                 content="Content 2",
-                last_modified=datetime.now(timezone.utc),
+                last_modified=datetime.now(UTC),
                 size_bytes=100,
             ),
         ]
@@ -191,7 +191,7 @@ class TestBuildCategoryTree:
                 uri="docs://a/b/c/d/doc",
                 title="Deep Doc",
                 content="Content",
-                last_modified=datetime.now(timezone.utc),
+                last_modified=datetime.now(UTC),
                 size_bytes=100,
             ),
         ]
@@ -349,6 +349,7 @@ class TestGetTableOfContents:
     def clear_cache(self):
         """Clear the cache before each test."""
         from hierarchical_docs_mcp.services.cache import get_cache
+
         get_cache().clear()
         yield
         get_cache().clear()
@@ -583,7 +584,7 @@ class TestHierarchyEdgeCases:
             uri="docs://readme",
             title="README",
             content="Content",
-            last_modified=datetime.now(timezone.utc),
+            last_modified=datetime.now(UTC),
             size_bytes=100,
         )
 
@@ -600,7 +601,7 @@ class TestHierarchyEdgeCases:
             uri="docs://guides/test-doc_name",
             title="Test Doc",
             content="Content",
-            last_modified=datetime.now(timezone.utc),
+            last_modified=datetime.now(UTC),
             size_bytes=100,
         )
 

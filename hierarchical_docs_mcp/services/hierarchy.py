@@ -1,6 +1,6 @@
 """Hierarchical navigation and category tree building."""
 
-from typing import Any
+from typing import Any, cast
 
 from hierarchical_docs_mcp.models.document import Document
 from hierarchical_docs_mcp.models.navigation import Category, NavigationContext
@@ -322,20 +322,21 @@ def get_table_of_contents(
     cache_key = f"toc:{max_depth}"
     cached = cache.get(cache_key)
     if cached:
-        return cached
+        return cast(dict[str, Any], cached)
 
     # Build TOC from root
     root_categories = [c for c in categories.values() if c.depth == 0]
 
-    toc = {
-        "type": "root",
-        "uri": "docs://",
-        "children": [],
-    }
-
+    children: list[Any] = []
     for root_cat in root_categories:
         if max_depth is None or root_cat.depth < max_depth:
-            toc["children"].append(_build_toc_node(root_cat, categories, documents, max_depth))
+            children.append(_build_toc_node(root_cat, categories, documents, max_depth))
+
+    toc: dict[str, Any] = {
+        "type": "root",
+        "uri": "docs://",
+        "children": children,
+    }
 
     # Cache the result
     cache.set(cache_key, toc, ttl=3600)
@@ -360,29 +361,21 @@ def _build_toc_node(
     Returns:
         TOC node dictionary
     """
-    node = {
-        "type": "category",
-        "uri": category.uri,
-        "name": category.label,
-        "document_count": category.document_count,
-        "children": [],
-    }
+    children: list[Any] = []
 
     # Add child categories only if within max_depth
     if max_depth is None or category.depth + 1 < max_depth:
         for child_uri in category.child_categories:
             if child_uri in categories:
                 child_cat = categories[child_uri]
-                node["children"].append(
-                    _build_toc_node(child_cat, categories, documents, max_depth)
-                )
+                children.append(_build_toc_node(child_cat, categories, documents, max_depth))
 
     # Add child documents only if within max_depth
     if max_depth is None or category.depth + 1 < max_depth:
         for doc_uri in category.child_documents:
             doc = next((d for d in documents if d.uri == doc_uri), None)
             if doc:
-                node["children"].append(
+                children.append(
                     {
                         "type": "document",
                         "uri": doc.uri,
@@ -390,5 +383,13 @@ def _build_toc_node(
                         "tags": doc.tags,
                     }
                 )
+
+    node: dict[str, Any] = {
+        "type": "category",
+        "uri": category.uri,
+        "name": category.label,
+        "document_count": category.document_count,
+        "children": children,
+    }
 
     return node

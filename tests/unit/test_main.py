@@ -35,7 +35,9 @@ class TestMain:
         # Mock functions to avoid actually starting the server
         with patch("hierarchical_docs_mcp.__main__.load_config", return_value=mock_config):
             with patch("hierarchical_docs_mcp.__main__.setup_logging"):
-                with patch("hierarchical_docs_mcp.__main__.serve", new_callable=AsyncMock) as mock_serve:
+                with patch(
+                    "hierarchical_docs_mcp.__main__.serve", new_callable=AsyncMock
+                ) as mock_serve:
                     try:
                         main()
                     except SystemExit:
@@ -126,7 +128,8 @@ class TestMain:
         """Test that validation error messages are displayed."""
         # Mock load_config to raise ValueError
         with patch(
-            "hierarchical_docs_mcp.__main__.load_config", side_effect=ValueError("Invalid path")
+            "hierarchical_docs_mcp.__main__.load_config",
+            side_effect=ValueError("Invalid path"),
         ):
             with pytest.raises(SystemExit) as exc_info:
                 main()

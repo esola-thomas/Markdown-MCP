@@ -97,7 +97,11 @@ class TestNavigationContextModel:
             parent_uri="docs://guides",
             parent_title="Guides",
             children=[
-                {"uri": "docs://guides/security/auth", "title": "Authentication", "type": "document"}
+                {
+                    "uri": "docs://guides/security/auth",
+                    "title": "Authentication",
+                    "type": "document",
+                }
             ],
             breadcrumbs=[
                 {"name": "guides", "uri": "docs://guides"},

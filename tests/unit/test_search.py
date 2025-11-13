@@ -23,7 +23,8 @@ class TestSearchContent:
     def sample_documents(self):
         """Create sample documents for testing."""
         return [
-            Document(uri="docs://guides/getting-started",
+            Document(
+                uri="docs://guides/getting-started",
                 title="Getting Started Guide",
                 content="This is a comprehensive guide to getting started with the system. "
                 "It covers installation, configuration, and basic usage.",
@@ -32,8 +33,10 @@ class TestSearchContent:
                 file_path="/docs/guides/getting-started.md",
                 relative_path="docs/guides/getting-started.md",
                 size_bytes=100,
-                last_modified=datetime.now(UTC),),
-            Document(uri="docs://api/authentication",
+                last_modified=datetime.now(UTC),
+            ),
+            Document(
+                uri="docs://api/authentication",
                 title="Authentication API",
                 content="The authentication API provides endpoints for user login, "
                 "logout, and token management. Use JWT tokens for secure access.",
@@ -42,8 +45,10 @@ class TestSearchContent:
                 file_path="/docs/api/authentication.md",
                 relative_path="docs/api/authentication.md",
                 size_bytes=100,
-                last_modified=datetime.now(UTC),),
-            Document(uri="docs://guides/advanced",
+                last_modified=datetime.now(UTC),
+            ),
+            Document(
+                uri="docs://guides/advanced",
                 title="Advanced Topics",
                 content="Advanced configuration options and optimization techniques. "
                 "Learn how to fine-tune performance and customize behavior.",
@@ -52,7 +57,8 @@ class TestSearchContent:
                 file_path="/docs/guides/advanced.md",
                 relative_path="docs/guides/advanced.md",
                 size_bytes=100,
-                last_modified=datetime.now(UTC),),
+                last_modified=datetime.now(UTC),
+            ),
         ]
 
     @pytest.fixture
@@ -65,9 +71,13 @@ class TestSearchContent:
                 label="Guides",
                 depth=0,
                 source_category="guides",
-                child_documents=["docs://guides/getting-started", "docs://guides/advanced"],
+                child_documents=[
+                    "docs://guides/getting-started",
+                    "docs://guides/advanced",
+                ],
                 child_categories=[],
-                document_count=2,),
+                document_count=2,
+            ),
             "docs://api": Category(
                 name="api",
                 uri="docs://api",
@@ -76,7 +86,8 @@ class TestSearchContent:
                 source_category="api",
                 child_documents=["docs://api/authentication"],
                 child_categories=[],
-                document_count=1,),
+                document_count=1,
+            ),
         }
 
     def test_search_content_basic_query(self, sample_documents, sample_categories):
@@ -120,7 +131,8 @@ class TestSearchContent:
     def test_search_content_with_category_filter(self, sample_documents, sample_categories):
         """Test search with category filter."""
         results = search_content(
-            "guide", sample_documents, sample_categories, category_filter="guides")
+            "guide", sample_documents, sample_categories, category_filter="guides"
+        )
 
         assert len(results) > 0
         assert all("guides" in r.document_uri for r in results)
@@ -152,7 +164,11 @@ class TestSearchContent:
 
         assert len(results) > 0
         # Should match documents with 'tutorial' tag
-        assert any("tutorial" in doc.tags for doc in sample_documents if doc.uri in [r.document_uri for r in results])
+        assert any(
+            "tutorial" in doc.tags
+            for doc in sample_documents
+            if doc.uri in [r.document_uri for r in results]
+        )
 
     def test_search_content_special_characters_escaped(self, sample_documents, sample_categories):
         """Test search handles regex special characters."""
@@ -214,7 +230,8 @@ class TestSearchByMetadata:
     def sample_documents(self):
         """Create sample documents for testing."""
         return [
-            Document(uri="docs://guides/getting-started",
+            Document(
+                uri="docs://guides/getting-started",
                 title="Getting Started",
                 content="Introduction to the system",
                 category="guides",
@@ -222,8 +239,10 @@ class TestSearchByMetadata:
                 file_path="/docs/guides/getting-started.md",
                 relative_path="docs/guides/getting-started.md",
                 size_bytes=100,
-                last_modified=datetime.now(UTC),),
-            Document(uri="docs://api/authentication",
+                last_modified=datetime.now(UTC),
+            ),
+            Document(
+                uri="docs://api/authentication",
                 title="Authentication",
                 content="Authentication details",
                 category="api",
@@ -231,8 +250,10 @@ class TestSearchByMetadata:
                 file_path="/docs/api/authentication.md",
                 relative_path="docs/api/authentication.md",
                 size_bytes=100,
-                last_modified=datetime.now(UTC),),
-            Document(uri="docs://guides/advanced",
+                last_modified=datetime.now(UTC),
+            ),
+            Document(
+                uri="docs://guides/advanced",
                 title="Advanced Guide",
                 content="Advanced topics",
                 category="guides",
@@ -240,7 +261,8 @@ class TestSearchByMetadata:
                 file_path="/docs/guides/advanced.md",
                 relative_path="docs/guides/advanced.md",
                 size_bytes=100,
-                last_modified=datetime.now(UTC),),
+                last_modified=datetime.now(UTC),
+            ),
         ]
 
     def test_search_by_tags(self, sample_documents):
@@ -248,7 +270,11 @@ class TestSearchByMetadata:
         results = search_by_metadata(tags=["tutorial"], documents=sample_documents)
 
         assert len(results) > 0
-        assert all("tutorial" in doc.tags for doc in sample_documents if doc.uri in [r.document_uri for r in results])
+        assert all(
+            "tutorial" in doc.tags
+            for doc in sample_documents
+            if doc.uri in [r.document_uri for r in results]
+        )
 
     def test_search_by_multiple_tags(self, sample_documents):
         """Test searching by multiple tags (OR logic)."""
@@ -267,7 +293,8 @@ class TestSearchByMetadata:
     def test_search_by_tags_and_category(self, sample_documents):
         """Test searching by both tags and category (AND logic)."""
         results = search_by_metadata(
-            tags=["tutorial"], category="guides", documents=sample_documents)
+            tags=["tutorial"], category="guides", documents=sample_documents
+        )
 
         assert len(results) > 0
         # Should find documents that match BOTH criteria
