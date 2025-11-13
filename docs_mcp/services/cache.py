@@ -6,7 +6,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from hierarchical_docs_mcp.utils.logger import logger
+from docs_mcp.utils.logger import logger
 
 
 class CacheEntry(BaseModel):

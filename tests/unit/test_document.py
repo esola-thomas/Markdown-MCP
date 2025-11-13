@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from hierarchical_docs_mcp.models.document import Document
+from docs_mcp.models.document import Document
 
 
 class TestDocumentModel:

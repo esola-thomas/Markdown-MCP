@@ -2,7 +2,7 @@
 
 import re
 
-from hierarchical_docs_mcp.utils.logger import audit_log, logger
+from docs_mcp.utils.logger import audit_log, logger
 
 
 class SanitizationError(Exception):

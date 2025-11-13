@@ -5,15 +5,15 @@ from unittest.mock import patch
 
 import pytest
 
-from hierarchical_docs_mcp.handlers.tools import (
+from docs_mcp.handlers.tools import (
     handle_get_document,
     handle_get_table_of_contents,
     handle_navigate_to,
     handle_search_by_tags,
     handle_search_documentation,
 )
-from hierarchical_docs_mcp.models.document import Document
-from hierarchical_docs_mcp.models.navigation import Category
+from docs_mcp.models.document import Document
+from docs_mcp.models.navigation import Category
 
 
 class TestHandleSearchDocumentation:

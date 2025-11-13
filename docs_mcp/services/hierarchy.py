@@ -2,10 +2,10 @@
 
 from typing import Any, cast
 
-from hierarchical_docs_mcp.models.document import Document
-from hierarchical_docs_mcp.models.navigation import Category, NavigationContext
-from hierarchical_docs_mcp.services.cache import get_cache
-from hierarchical_docs_mcp.utils.logger import logger
+from docs_mcp.models.document import Document
+from docs_mcp.models.navigation import Category, NavigationContext
+from docs_mcp.services.cache import get_cache
+from docs_mcp.utils.logger import logger
 
 
 class HierarchyError(Exception):

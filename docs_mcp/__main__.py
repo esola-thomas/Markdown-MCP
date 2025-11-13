@@ -3,9 +3,9 @@
 import asyncio
 import sys
 
-from hierarchical_docs_mcp.config import load_config
-from hierarchical_docs_mcp.server import serve
-from hierarchical_docs_mcp.utils.logger import setup_logging
+from docs_mcp.config import load_config
+from docs_mcp.server import serve
+from docs_mcp.utils.logger import setup_logging
 
 
 def main() -> None:

@@ -5,12 +5,12 @@ from pathlib import Path
 
 import pytest
 
-from hierarchical_docs_mcp.handlers.resources import (
+from docs_mcp.handlers.resources import (
     handle_resource_read,
     list_resources,
 )
-from hierarchical_docs_mcp.models.document import Document
-from hierarchical_docs_mcp.services.hierarchy import build_category_tree
+from docs_mcp.models.document import Document
+from docs_mcp.services.hierarchy import build_category_tree
 
 
 @pytest.fixture

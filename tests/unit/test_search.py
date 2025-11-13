@@ -5,9 +5,9 @@ from unittest.mock import patch
 
 import pytest
 
-from hierarchical_docs_mcp.models.document import Document
-from hierarchical_docs_mcp.models.navigation import Category
-from hierarchical_docs_mcp.services.search import (
+from docs_mcp.models.document import Document
+from docs_mcp.models.navigation import Category
+from docs_mcp.services.search import (
     SearchError,
     _extract_excerpt,
     _highlight_matches,

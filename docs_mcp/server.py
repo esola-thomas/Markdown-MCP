@@ -7,13 +7,13 @@ from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import Resource, Tool
 
-from hierarchical_docs_mcp.config import ServerConfig
-from hierarchical_docs_mcp.handlers import resources, tools
-from hierarchical_docs_mcp.models.document import Document
-from hierarchical_docs_mcp.models.navigation import Category
-from hierarchical_docs_mcp.services.hierarchy import build_category_tree
-from hierarchical_docs_mcp.services.markdown import scan_markdown_files
-from hierarchical_docs_mcp.utils.logger import logger
+from docs_mcp.config import ServerConfig
+from docs_mcp.handlers import resources, tools
+from docs_mcp.models.document import Document
+from docs_mcp.models.navigation import Category
+from docs_mcp.services.hierarchy import build_category_tree
+from docs_mcp.services.markdown import scan_markdown_files
+from docs_mcp.utils.logger import logger
 
 
 class DocumentationMCPServer:

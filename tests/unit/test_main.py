@@ -4,8 +4,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from hierarchical_docs_mcp.__main__ import main
-from hierarchical_docs_mcp.config import ServerConfig
+from docs_mcp.__main__ import main
+from docs_mcp.config import ServerConfig
 
 
 class TestMain:

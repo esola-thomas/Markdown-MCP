@@ -4,12 +4,12 @@ from datetime import UTC, datetime
 
 import pytest
 
-from hierarchical_docs_mcp.handlers.resources import (
+from docs_mcp.handlers.resources import (
     handle_resource_read,
     list_resources,
 )
-from hierarchical_docs_mcp.models.document import Document
-from hierarchical_docs_mcp.models.navigation import Category
+from docs_mcp.models.document import Document
+from docs_mcp.models.navigation import Category
 
 
 class TestHandleResourceRead:

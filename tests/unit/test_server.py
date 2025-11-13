@@ -4,8 +4,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from hierarchical_docs_mcp.config import ServerConfig
-from hierarchical_docs_mcp.server import DocumentationMCPServer, serve
+from docs_mcp.config import ServerConfig
+from docs_mcp.server import DocumentationMCPServer, serve
 
 
 class TestDocumentationMCPServer:
