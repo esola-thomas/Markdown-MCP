@@ -69,6 +69,8 @@ jobs:
           pytest tests/integration/ tests/contract/ \
             --verbose \
             --tb=short
+            --cov-fail-under=25
+
 
   package-test:
     name: Package Installation Test
