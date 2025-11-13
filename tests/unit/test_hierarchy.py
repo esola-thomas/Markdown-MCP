@@ -1,6 +1,6 @@
 """Unit tests for hierarchical navigation and category tree building."""
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
@@ -23,7 +23,7 @@ from hierarchical_docs_mcp.services.hierarchy import (
 @pytest.fixture
 def sample_documents():
     """Create sample documents for testing."""
-    base_time = datetime.now(timezone.utc)
+    base_time = datetime.now(UTC)
 
     return [
         Document(
@@ -162,7 +162,7 @@ class TestBuildCategoryTree:
                 uri="docs://guides/doc1",
                 title="Doc 1",
                 content="Content 1",
-                last_modified=datetime.now(timezone.utc),
+                last_modified=datetime.now(UTC),
                 size_bytes=100,
             ),
             Document(
@@ -171,7 +171,7 @@ class TestBuildCategoryTree:
                 uri="docs://guides/doc2",
                 title="Doc 2",
                 content="Content 2",
-                last_modified=datetime.now(timezone.utc),
+                last_modified=datetime.now(UTC),
                 size_bytes=100,
             ),
         ]
@@ -191,7 +191,7 @@ class TestBuildCategoryTree:
                 uri="docs://a/b/c/d/doc",
                 title="Deep Doc",
                 content="Content",
-                last_modified=datetime.now(timezone.utc),
+                last_modified=datetime.now(UTC),
                 size_bytes=100,
             ),
         ]
@@ -294,7 +294,9 @@ class TestNavigateToUri:
     def test_navigate_to_document(self, sample_documents):
         """Test navigating to a document."""
         categories = build_category_tree(sample_documents)
-        context = navigate_to_uri("docs://guides/getting-started", sample_documents, categories)
+        context = navigate_to_uri(
+            "docs://guides/getting-started", sample_documents, categories
+        )
 
         assert context.current_type == "document"
         assert context.current_uri == "docs://guides/getting-started"
@@ -311,7 +313,9 @@ class TestNavigateToUri:
     def test_navigate_to_nested_category(self, sample_documents):
         """Test navigating to nested category."""
         categories = build_category_tree(sample_documents)
-        context = navigate_to_uri("docs://guides/advanced", sample_documents, categories)
+        context = navigate_to_uri(
+            "docs://guides/advanced", sample_documents, categories
+        )
 
         assert context.current_type == "category"
         assert context.current_uri == "docs://guides/advanced"
@@ -336,7 +340,9 @@ class TestNavigateToUri:
     def test_navigation_options_at_document(self, sample_documents):
         """Test navigation options at document."""
         categories = build_category_tree(sample_documents)
-        context = navigate_to_uri("docs://guides/getting-started", sample_documents, categories)
+        context = navigate_to_uri(
+            "docs://guides/getting-started", sample_documents, categories
+        )
 
         assert "up" in context.navigation_options
         assert "down" not in context.navigation_options
@@ -349,6 +355,7 @@ class TestGetTableOfContents:
     def clear_cache(self):
         """Clear the cache before each test."""
         from hierarchical_docs_mcp.services.cache import get_cache
+
         get_cache().clear()
         yield
         get_cache().clear()
@@ -368,7 +375,9 @@ class TestGetTableOfContents:
         toc = get_table_of_contents(categories, sample_documents)
 
         # Find guides category in children
-        guides_child = next((c for c in toc["children"] if c["uri"] == "docs://guides"), None)
+        guides_child = next(
+            (c for c in toc["children"] if c["uri"] == "docs://guides"), None
+        )
 
         assert guides_child is not None
         assert guides_child["type"] == "category"
@@ -404,7 +413,11 @@ class TestGetTableOfContents:
 
         # Should have getting-started document
         doc = next(
-            (c for c in guides["children"] if c["uri"] == "docs://guides/getting-started"),
+            (
+                c
+                for c in guides["children"]
+                if c["uri"] == "docs://guides/getting-started"
+            ),
             None,
         )
         assert doc is not None
@@ -583,7 +596,7 @@ class TestHierarchyEdgeCases:
             uri="docs://readme",
             title="README",
             content="Content",
-            last_modified=datetime.now(timezone.utc),
+            last_modified=datetime.now(UTC),
             size_bytes=100,
         )
 
@@ -600,7 +613,7 @@ class TestHierarchyEdgeCases:
             uri="docs://guides/test-doc_name",
             title="Test Doc",
             content="Content",
-            last_modified=datetime.now(timezone.utc),
+            last_modified=datetime.now(UTC),
             size_bytes=100,
         )
 

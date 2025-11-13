@@ -2,7 +2,10 @@
 
 import pytest
 
-from hierarchical_docs_mcp.handlers.resources import handle_resource_read, list_resources
+from hierarchical_docs_mcp.handlers.resources import (
+    handle_resource_read,
+    list_resources,
+)
 from hierarchical_docs_mcp.handlers.tools import (
     handle_get_table_of_contents,
     handle_navigate_to,
@@ -30,7 +33,8 @@ def test_docs_structure(tmp_path):
     guides = doc_root / "guides"
     guides.mkdir()
 
-    (guides / "getting-started.md").write_text(r"""---
+    (guides / "getting-started.md").write_text(
+        r"""---
 title: Getting Started
 tags: [beginner, tutorial]
 category: guides
@@ -57,9 +61,11 @@ Here's a simple example:
 from our_package import hello
 hello()
 \`\`\`
-""")
+"""
+    )
 
-    (guides / "configuration.md").write_text("""---
+    (guides / "configuration.md").write_text(
+        """---
 title: Configuration Guide
 tags: [configuration, setup]
 category: guides
@@ -75,13 +81,15 @@ Learn how to configure the application.
 Set environment variables:
 - `API_KEY`: Your API key
 - `DEBUG`: Enable debug mode
-""")
+"""
+    )
 
     # Create advanced guides
     advanced = guides / "advanced"
     advanced.mkdir()
 
-    (advanced / "performance.md").write_text("""---
+    (advanced / "performance.md").write_text(
+        """---
 title: Performance Optimization
 tags: [advanced, performance]
 category: guides
@@ -99,13 +107,15 @@ Use caching to improve response times.
 ## Database Optimization
 
 Index your queries properly.
-""")
+"""
+    )
 
     # Create API reference section
     api = doc_root / "api"
     api.mkdir()
 
-    (api / "authentication.md").write_text(r"""---
+    (api / "authentication.md").write_text(
+        r"""---
 title: Authentication API
 tags: [api, security, authentication]
 category: api
@@ -131,9 +141,11 @@ Authenticate a user and get a token.
   "expires": "2024-12-31T23:59:59Z"
 }
 \`\`\`
-""")
+"""
+    )
 
-    (api / "users.md").write_text("""---
+    (api / "users.md").write_text(
+        """---
 title: Users API
 tags: [api, users]
 category: api
@@ -151,7 +163,8 @@ List all users.
 ## POST /users
 
 Create a new user.
-""")
+"""
+    )
 
     return doc_root
 

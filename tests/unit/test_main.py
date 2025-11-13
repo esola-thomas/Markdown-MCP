@@ -16,7 +16,9 @@ class TestMain:
         # Mock load_config to return config without docs_root
         mock_config = ServerConfig()
 
-        with patch("hierarchical_docs_mcp.__main__.load_config", return_value=mock_config):
+        with patch(
+            "hierarchical_docs_mcp.__main__.load_config", return_value=mock_config
+        ):
             with pytest.raises(SystemExit) as exc_info:
                 main()
 
@@ -33,9 +35,13 @@ class TestMain:
         mock_config = ServerConfig(docs_root=str(docs_dir))
 
         # Mock functions to avoid actually starting the server
-        with patch("hierarchical_docs_mcp.__main__.load_config", return_value=mock_config):
+        with patch(
+            "hierarchical_docs_mcp.__main__.load_config", return_value=mock_config
+        ):
             with patch("hierarchical_docs_mcp.__main__.setup_logging"):
-                with patch("hierarchical_docs_mcp.__main__.serve", new_callable=AsyncMock) as mock_serve:
+                with patch(
+                    "hierarchical_docs_mcp.__main__.serve", new_callable=AsyncMock
+                ) as mock_serve:
                     try:
                         main()
                     except SystemExit:
@@ -54,7 +60,9 @@ class TestMain:
         # Mock serve to raise KeyboardInterrupt
         mock_serve = AsyncMock(side_effect=KeyboardInterrupt)
 
-        with patch("hierarchical_docs_mcp.__main__.load_config", return_value=mock_config):
+        with patch(
+            "hierarchical_docs_mcp.__main__.load_config", return_value=mock_config
+        ):
             with patch("hierarchical_docs_mcp.__main__.setup_logging"):
                 with patch("hierarchical_docs_mcp.__main__.serve", mock_serve):
                     with pytest.raises(SystemExit) as exc_info:
@@ -75,7 +83,9 @@ class TestMain:
         # Mock serve to raise general exception
         mock_serve = AsyncMock(side_effect=Exception("Test error"))
 
-        with patch("hierarchical_docs_mcp.__main__.load_config", return_value=mock_config):
+        with patch(
+            "hierarchical_docs_mcp.__main__.load_config", return_value=mock_config
+        ):
             with patch("hierarchical_docs_mcp.__main__.setup_logging"):
                 with patch("hierarchical_docs_mcp.__main__.serve", mock_serve):
                     with pytest.raises(SystemExit) as exc_info:
@@ -93,9 +103,13 @@ class TestMain:
 
         mock_config = ServerConfig(docs_root=str(docs_dir), log_level="DEBUG")
 
-        with patch("hierarchical_docs_mcp.__main__.load_config", return_value=mock_config):
+        with patch(
+            "hierarchical_docs_mcp.__main__.load_config", return_value=mock_config
+        ):
             with patch("hierarchical_docs_mcp.__main__.setup_logging") as mock_setup:
-                with patch("hierarchical_docs_mcp.__main__.serve", new_callable=AsyncMock):
+                with patch(
+                    "hierarchical_docs_mcp.__main__.serve", new_callable=AsyncMock
+                ):
                     try:
                         main()
                     except SystemExit:
@@ -114,7 +128,9 @@ class TestMain:
             "hierarchical_docs_mcp.__main__.load_config", return_value=mock_config
         ) as mock_load:
             with patch("hierarchical_docs_mcp.__main__.setup_logging"):
-                with patch("hierarchical_docs_mcp.__main__.serve", new_callable=AsyncMock):
+                with patch(
+                    "hierarchical_docs_mcp.__main__.serve", new_callable=AsyncMock
+                ):
                     try:
                         main()
                     except SystemExit:
@@ -126,7 +142,8 @@ class TestMain:
         """Test that validation error messages are displayed."""
         # Mock load_config to raise ValueError
         with patch(
-            "hierarchical_docs_mcp.__main__.load_config", side_effect=ValueError("Invalid path")
+            "hierarchical_docs_mcp.__main__.load_config",
+            side_effect=ValueError("Invalid path"),
         ):
             with pytest.raises(SystemExit) as exc_info:
                 main()

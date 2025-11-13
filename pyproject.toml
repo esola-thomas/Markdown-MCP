@@ -76,3 +76,7 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 strict_equality = true
+
+[[tool.mypy.overrides]]
+module = ["pydantic", "pydantic_settings", "mcp.*", "yaml"]
+ignore_missing_imports = true

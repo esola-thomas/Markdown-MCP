@@ -3,7 +3,7 @@
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import yaml
 
@@ -48,7 +48,7 @@ def parse_markdown_with_metadata(
     cache_key = f"markdown:{validated_path}"
     cached = cache.get(cache_key, validated_path)
     if cached:
-        return cached
+        return cast(Document, cached)
 
     # Read file
     try:

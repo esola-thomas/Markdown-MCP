@@ -40,7 +40,10 @@ class TestAPIOperation:
                 "required": True,
                 "content": {
                     "application/json": {
-                        "schema": {"type": "object", "properties": {"name": {"type": "string"}}}
+                        "schema": {
+                            "type": "object",
+                            "properties": {"name": {"type": "string"}},
+                        }
                     }
                 },
             },
@@ -75,7 +78,9 @@ class TestAPIOperation:
         assert detailed_operation.request_body is not None
         assert len(detailed_operation.responses) == 2
 
-    def test_full_description_with_both_summary_and_description(self, detailed_operation):
+    def test_full_description_with_both_summary_and_description(
+        self, detailed_operation
+    ):
         """Test full_description property combines summary and description."""
         expected = "Create a new user\n\nCreates a new user in the system with the provided details."
         assert detailed_operation.full_description == expected
@@ -225,7 +230,10 @@ class TestOpenAPISpecification:
             version="3.0.0",
             title="Invalid API",
             validated=False,
-            validation_errors=["Missing required field: paths", "Invalid schema format"],
+            validation_errors=[
+                "Missing required field: paths",
+                "Invalid schema format",
+            ],
         )
 
         assert spec.validated is False
@@ -310,7 +318,10 @@ class TestOpenAPISpecification:
         )
 
         assert len(spec.operations) == 3
-        assert all(key in spec.operations for key in ["get_users", "create_user", "delete_user"])
+        assert all(
+            key in spec.operations
+            for key in ["get_users", "create_user", "delete_user"]
+        )
 
     def test_spec_empty_operations_and_schemas(self, basic_spec):
         """Test specification with empty operations and schemas."""

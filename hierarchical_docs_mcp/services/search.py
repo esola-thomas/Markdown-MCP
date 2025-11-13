@@ -1,7 +1,7 @@
 """Search functionality for documentation."""
 
 import re
-from typing import Literal
+from typing import Literal, cast
 
 from hierarchical_docs_mcp.models.document import Document
 from hierarchical_docs_mcp.models.navigation import Category, SearchResult
@@ -53,7 +53,7 @@ def search_content(
         cache_key = f"search:{sanitized_query}:{category_filter}:{limit}"
         cached = cache.get(cache_key)
         if cached:
-            return cached
+            return cast(list[SearchResult], cached)
 
         results = []
 
