@@ -1,317 +1,746 @@
-// Utility function to escape HTML
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+// ============================================================================
+// Modern Markdown MCP Documentation Web Interface
+// ============================================================================
+
+// State Management
+const state = {
+    currentView: 'home',
+    theme: localStorage.getItem('theme') || 'light',
+    searchResults: [],
+    tocData: null,
+    currentDocument: null,
+};
+
+// ============================================================================
+// Initialization
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeTheme();
+    initializeEventListeners();
+    loadHealthStats();
+    showHomeView();
+});
+
+// ============================================================================
+// Theme Management
+// ============================================================================
+
+function initializeTheme() {
+    document.documentElement.setAttribute('data-theme', state.theme);
+    updateThemeIcon();
 }
 
-// Load health stats on page load
-fetch('/api/health')
-    .then(res => res.json())
-    .then(data => {
-        document.getElementById('doc-count').textContent = data.documents;
-        document.getElementById('category-count').textContent = data.categories;
-    })
-    .catch(err => console.error('Failed to load stats:', err));
+function toggleTheme() {
+    state.theme = state.theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', state.theme);
+    document.documentElement.setAttribute('data-theme', state.theme);
+    updateThemeIcon();
+}
 
-// Tab switching
-document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-        const tabName = this.getAttribute('data-tab');
+function updateThemeIcon() {
+    const icon = document.querySelector('#theme-toggle i');
+    icon.className = state.theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+}
 
-        // Hide all tab contents
-        document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active');
-        });
+// ============================================================================
+// Event Listeners
+// ============================================================================
 
-        // Remove active class from all tabs
-        document.querySelectorAll('.tab').forEach(t => {
-            t.classList.remove('active');
-        });
+function initializeEventListeners() {
+    // Theme toggle
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 
-        // Show selected tab content
-        document.getElementById(tabName + '-tab').classList.add('active');
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileMenu);
 
-        // Add active class to clicked tab
-        this.classList.add('active');
+    // Logo click - go to home
+    document.getElementById('logo-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        navigateToView('home');
     });
-});
 
-// Search button
-document.getElementById('search-btn').addEventListener('click', performSearch);
-document.getElementById('search-query').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') performSearch();
-});
+    // Navigation links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            const view = this.getAttribute('data-view');
+            navigateToView(view);
+        });
+    });
 
-// TOC button
-document.getElementById('toc-btn').addEventListener('click', loadTableOfContents);
+    // Header search
+    const headerSearch = document.getElementById('header-search');
+    headerSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            performSearch(headerSearch.value);
+        }
+    });
 
-// Tags button
-document.getElementById('tags-btn').addEventListener('click', searchByTags);
-document.getElementById('tags-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') searchByTags();
-});
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        // "/" to focus search
+        if (e.key === '/' && !isInputFocused()) {
+            e.preventDefault();
+            document.getElementById('header-search').focus();
+        }
+        // Escape to clear search
+        if (e.key === 'Escape') {
+            document.getElementById('header-search').blur();
+        }
+    });
+}
 
-// Document button
-document.getElementById('document-btn').addEventListener('click', getDocument);
-document.getElementById('document-uri').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') getDocument();
-});
+function isInputFocused() {
+    const activeElement = document.activeElement;
+    return activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
+}
 
-async function performSearch() {
-    const query = document.getElementById('search-query').value;
-    if (!query) {
-        alert('Please enter a search query');
+function toggleMobileMenu() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('open');
+}
+
+// ============================================================================
+// Navigation
+// ============================================================================
+
+function navigateToView(view) {
+    state.currentView = view;
+
+    // Update navigation active state
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    document.querySelector(`.nav-link[data-view="${view}"]`)?.classList.add('active');
+
+    // Close mobile menu
+    document.getElementById('sidebar').classList.remove('open');
+
+    // Load view
+    switch(view) {
+        case 'home':
+            showHomeView();
+            break;
+        case 'search':
+            showSearchView();
+            break;
+        case 'toc':
+            showTocView();
+            break;
+        case 'tags':
+            showTagsView();
+            break;
+        default:
+            showHomeView();
+    }
+}
+
+// ============================================================================
+// Health Stats
+// ============================================================================
+
+async function loadHealthStats() {
+    try {
+        const response = await fetch('/api/health');
+        const data = await response.json();
+        document.getElementById('doc-count').textContent = data.documents || 0;
+        document.getElementById('category-count').textContent = data.categories || 0;
+    } catch (err) {
+        console.error('Failed to load stats:', err);
+    }
+}
+
+// ============================================================================
+// View Rendering
+// ============================================================================
+
+function showHomeView() {
+    const contentArea = document.getElementById('content-area');
+    contentArea.innerHTML = `
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Welcome to Markdown MCP Documentation</h1>
+                <p class="card-subtitle">Browse and search documentation with the same powerful tools available to LLMs</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                <div class="card" style="cursor: pointer;" onclick="navigateToView('search')">
+                    <div style="text-align: center;">
+                        <i class="fas fa-search" style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 1rem;"></i>
+                        <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">Search</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9375rem;">Full-text search across all documentation</p>
+                    </div>
+                </div>
+
+                <div class="card" style="cursor: pointer;" onclick="navigateToView('toc')">
+                    <div style="text-align: center;">
+                        <i class="fas fa-list" style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 1rem;"></i>
+                        <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">Browse</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9375rem;">Explore the documentation structure</p>
+                    </div>
+                </div>
+
+                <div class="card" style="cursor: pointer;" onclick="navigateToView('tags')">
+                    <div style="text-align: center;">
+                        <i class="fas fa-tags" style="font-size: 2.5rem; color: var(--accent-primary); margin-bottom: 1rem;"></i>
+                        <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">Tags</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9375rem;">Filter documentation by tags</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: var(--radius-lg);">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">Quick Tips</h3>
+                <ul style="color: var(--text-secondary); line-height: 2;">
+                    <li>Press <code style="background: var(--bg-tertiary); padding: 0.125rem 0.5rem; border-radius: var(--radius-sm); font-family: 'JetBrains Mono', monospace;">/</code> to quickly focus the search bar</li>
+                    <li>Use the table of contents to browse documentation hierarchically</li>
+                    <li>Toggle dark mode with the moon/sun icon in the header</li>
+                    <li>Click on any document card to view its full content with proper markdown rendering</li>
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+function showSearchView() {
+    const contentArea = document.getElementById('content-area');
+    contentArea.innerHTML = `
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Search Documentation</h1>
+                <p class="card-subtitle">Search across all markdown documents with full-text search</p>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                <input
+                    type="text"
+                    id="search-query-input"
+                    class="search-input"
+                    placeholder="Enter your search query..."
+                    style="flex: 1; padding: 0.75rem 1rem; font-size: 1rem;"
+                    autocomplete="off"
+                >
+                <button class="btn btn-primary" id="search-submit-btn" style="padding: 0.75rem 2rem;">
+                    <i class="fas fa-search" style="margin-right: 0.5rem;"></i>
+                    Search
+                </button>
+            </div>
+
+            <div id="search-results-container"></div>
+        </div>
+    `;
+
+    // Add event listeners
+    const searchInput = document.getElementById('search-query-input');
+    const searchBtn = document.getElementById('search-submit-btn');
+
+    searchInput.focus();
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            performSearch(searchInput.value);
+        }
+    });
+    searchBtn.addEventListener('click', () => {
+        performSearch(searchInput.value);
+    });
+}
+
+function showTocView() {
+    const contentArea = document.getElementById('content-area');
+    contentArea.innerHTML = `
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Table of Contents</h1>
+                <p class="card-subtitle">Browse all documentation organized by categories</p>
+            </div>
+
+            <div id="toc-container">
+                <div class="loading-skeleton skeleton-title"></div>
+                <div class="loading-skeleton skeleton-text"></div>
+                <div class="loading-skeleton skeleton-text"></div>
+                <div class="loading-skeleton skeleton-text"></div>
+            </div>
+        </div>
+    `;
+
+    loadTableOfContents();
+}
+
+function showTagsView() {
+    const contentArea = document.getElementById('content-area');
+    contentArea.innerHTML = `
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Browse by Tags</h1>
+                <p class="card-subtitle">Filter documentation by metadata tags</p>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                <input
+                    type="text"
+                    id="tags-input"
+                    class="search-input"
+                    placeholder="Enter tags (comma-separated)..."
+                    style="flex: 1; padding: 0.75rem 1rem; font-size: 1rem;"
+                    autocomplete="off"
+                >
+                <button class="btn btn-primary" id="tags-submit-btn" style="padding: 0.75rem 2rem;">
+                    <i class="fas fa-filter" style="margin-right: 0.5rem;"></i>
+                    Filter
+                </button>
+            </div>
+
+            <div id="tags-results-container"></div>
+        </div>
+    `;
+
+    // Add event listeners
+    const tagsInput = document.getElementById('tags-input');
+    const tagsBtn = document.getElementById('tags-submit-btn');
+
+    tagsInput.focus();
+    tagsInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchByTags(tagsInput.value);
+        }
+    });
+    tagsBtn.addEventListener('click', () => {
+        searchByTags(tagsInput.value);
+    });
+}
+
+// ============================================================================
+// Search Functionality
+// ============================================================================
+
+async function performSearch(query) {
+    if (!query || query.trim() === '') {
+        showEmptyState('search-results-container', 'Please enter a search query', 'fas fa-search');
         return;
     }
 
-    showLoading();
+    const container = document.getElementById('search-results-container');
+    if (!container) return;
+
+    // Show loading
+    container.innerHTML = `
+        <div class="loading-skeleton skeleton-title"></div>
+        <div class="loading-skeleton skeleton-text"></div>
+        <div class="loading-skeleton skeleton-text"></div>
+        <div class="loading-skeleton skeleton-text"></div>
+    `;
 
     try {
         const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
         const data = await response.json();
 
-        if (data.results && data.results.length > 0) {
-            displaySearchResults(data.results);
-        } else {
-            showNoResults();
+        if (data.error) {
+            showErrorState(container, 'Search Error', data.error);
+            return;
         }
+
+        if (!data.results || data.results.length === 0) {
+            showEmptyState('search-results-container', 'No results found', 'fas fa-search', 'Try different keywords or browse the table of contents');
+            return;
+        }
+
+        displaySearchResults(data.results, container);
     } catch (err) {
-        showError('Search failed: ' + err.message);
+        showErrorState(container, 'Search Failed', err.message);
     }
 }
 
+function displaySearchResults(results, container) {
+    let html = `
+        <div style="margin-bottom: 1.5rem; color: var(--text-secondary);">
+            Found <strong style="color: var(--text-primary);">${results.length}</strong> result${results.length !== 1 ? 's' : ''}
+        </div>
+        <div class="results-grid">
+    `;
+
+    results.forEach(result => {
+        if (result.error) {
+            html += `<div class="error-state"><div class="error-content"><p>${escapeHtml(result.error)}</p></div></div>`;
+            return;
+        }
+
+        const relevance = result.relevance !== undefined ? (result.relevance * 100).toFixed(0) : null;
+        const excerpt = result.excerpt || truncateText(result.content, 200);
+
+        html += `
+            <div class="result-card" onclick='navigateToDocument("${escapeHtml(result.uri)}")'>
+                <div class="result-header">
+                    <div>
+                        <div class="result-title">${escapeHtml(result.title || 'Untitled')}</div>
+                        <div class="result-path">${escapeHtml(result.breadcrumbs || result.uri)}</div>
+                    </div>
+                    ${relevance ? `
+                        <div class="result-relevance">
+                            <i class="fas fa-chart-line"></i>
+                            <span>${relevance}%</span>
+                        </div>
+                    ` : ''}
+                </div>
+                ${excerpt ? `<div class="result-excerpt">${excerpt}</div>` : ''}
+                ${result.tags && result.tags.length > 0 ? `
+                    <div class="result-tags">
+                        ${result.tags.map(tag => `<span class="tag"><i class="fas fa-tag"></i> ${escapeHtml(tag)}</span>`).join('')}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    });
+
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// ============================================================================
+// Table of Contents
+// ============================================================================
+
 async function loadTableOfContents() {
-    showLoading();
+    const container = document.getElementById('toc-container');
+    if (!container) return;
 
     try {
         const response = await fetch('/api/toc');
         const data = await response.json();
-        displayTableOfContents(data);
-    } catch (err) {
-        showError('Failed to load table of contents: ' + err.message);
-    }
-}
-
-async function searchByTags() {
-    const tagsInput = document.getElementById('tags-input').value;
-    if (!tagsInput) {
-        alert('Please enter at least one tag');
-        return;
-    }
-
-    const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
-
-    showLoading();
-
-    try {
-        const response = await fetch('/api/search-by-tags', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ tags }),
-        });
-        const data = await response.json();
-
-        if (data.results && data.results.length > 0) {
-            displaySearchResults(data.results);
-        } else {
-            showNoResults();
-        }
-    } catch (err) {
-        showError('Tag search failed: ' + err.message);
-    }
-}
-
-async function getDocument() {
-    const uri = document.getElementById('document-uri').value;
-    if (!uri) {
-        alert('Please enter a document URI');
-        return;
-    }
-
-    showLoading();
-
-    try {
-        const response = await fetch(`/api/document?uri=${encodeURIComponent(uri)}`);
-        const data = await response.json();
 
         if (data.error) {
-            showError(data.error);
-        } else {
-            displayDocument(data);
-        }
-    } catch (err) {
-        showError('Failed to get document: ' + err.message);
-    }
-}
-
-async function navigateToUri(uri) {
-    showLoading();
-
-    try {
-        const response = await fetch(`/api/document?uri=${encodeURIComponent(uri)}`);
-        const data = await response.json();
-
-        if (data.error) {
-            showError(data.error);
-        } else {
-            displayDocument(data);
-        }
-    } catch (err) {
-        showError('Failed to navigate: ' + err.message);
-    }
-}
-
-function displaySearchResults(results) {
-    const resultsDiv = document.getElementById('results');
-
-    let html = '<h2 style="margin-bottom: 1.5rem;">Search Results (' + results.length + ')</h2>';
-
-    results.forEach((result, index) => {
-        if (result.error) {
-            html += '<div class="error">' + escapeHtml(result.error) + '</div>';
+            showErrorState(container, 'Failed to Load', data.error);
             return;
         }
 
-        html += '<div class="result-item">';
-        html += '<div class="result-title" data-uri="' + escapeHtml(result.uri) +
-                '" data-result-index="' + index + '">' +
-                escapeHtml(result.title || 'Untitled') + '</div>';
-        if (result.breadcrumbs) {
-            html += '<div class="breadcrumbs">' + escapeHtml(result.breadcrumbs) + '</div>';
-        }
-        if (result.excerpt) {
-            html += '<div class="excerpt">' + result.excerpt + '</div>';
-        }
-        if (result.relevance !== undefined) {
-            html += '<span class="relevance">Relevance: ' +
-                    (result.relevance * 100).toFixed(0) + '%</span>';
-        }
-        html += '</div>';
-    });
-
-    resultsDiv.innerHTML = html;
-
-    // Add click handlers after inserting HTML
-    document.querySelectorAll('.result-title[data-uri]').forEach(el => {
-        el.style.cursor = 'pointer';
-        el.addEventListener('click', function() {
-            navigateToUri(this.getAttribute('data-uri'));
-        });
-    });
+        state.tocData = data;
+        displayTableOfContents(data, container);
+        updateQuickToc(data);
+    } catch (err) {
+        showErrorState(container, 'Failed to Load TOC', err.message);
+    }
 }
 
-function displayTableOfContents(toc) {
-    const resultsDiv = document.getElementById('results');
-
-    let html = '<h2 style="margin-bottom: 1.5rem;">Table of Contents</h2>';
-    html += '<ul class="toc-tree">';
-
-    // Render children if they exist
-    if (toc.children && toc.children.length > 0) {
-        toc.children.forEach(child => {
-            html += renderTocNode(child);
-        });
-    } else {
-        html += '<li>No documentation found</li>';
+function displayTableOfContents(toc, container) {
+    if (!toc.children || toc.children.length === 0) {
+        showEmptyState('toc-container', 'No documentation found', 'fas fa-folder-open');
+        return;
     }
 
+    let html = '<ul class="toc-tree">';
+    toc.children.forEach(child => {
+        html += renderTocNode(child);
+    });
     html += '</ul>';
 
-    resultsDiv.innerHTML = html;
-
-    // Add click handlers for documents
-    document.querySelectorAll('.toc-document[data-uri]').forEach(el => {
-        el.addEventListener('click', function() {
-            navigateToUri(this.getAttribute('data-uri'));
-        });
-    });
+    container.innerHTML = html;
 }
 
 function renderTocNode(node) {
-    let html = '';
+    let html = '<li class="toc-item">';
 
     if (node.type === 'category') {
-        html += '<li class="toc-item">';
-        html += '<div class="toc-category">' + escapeHtml(node.name) +
-                ' (' + node.document_count + ' docs)</div>';
+        html += `
+            <div class="toc-category">
+                <i class="fas fa-folder"></i>
+                <span>${escapeHtml(node.name)}</span>
+                <span style="margin-left: auto; font-size: 0.8125rem; color: var(--text-tertiary);">${node.document_count} docs</span>
+            </div>
+        `;
 
         if (node.children && node.children.length > 0) {
-            html += '<ul class="toc-tree">';
+            html += '<ul class="toc-tree toc-children">';
             node.children.forEach(child => {
                 html += renderTocNode(child);
             });
             html += '</ul>';
         }
-
-        html += '</li>';
     } else if (node.type === 'document') {
-        html += '<li class="toc-item">';
-        html += '<div class="toc-document" data-uri="' + escapeHtml(node.uri) + '">' +
-                escapeHtml(node.name) + '</div>';
-        html += '</li>';
+        html += `
+            <div class="toc-document" onclick='navigateToDocument("${escapeHtml(node.uri)}")'>
+                <i class="fas fa-file-alt"></i>
+                <span>${escapeHtml(node.name)}</span>
+            </div>
+        `;
     }
 
+    html += '</li>';
     return html;
 }
 
-function displayDocument(doc) {
-    const resultsDiv = document.getElementById('results');
+function updateQuickToc(toc) {
+    const quickToc = document.getElementById('quick-toc');
+    if (!quickToc || !toc.children || toc.children.length === 0) return;
 
-    let html = '<div class="document-content">';
-    html += '<h1>' + escapeHtml(doc.title) + '</h1>';
+    let html = '<ul class="toc-tree">';
 
-    if (doc.breadcrumbs && Array.isArray(doc.breadcrumbs)) {
-        const breadcrumbsText = doc.breadcrumbs.map(b => escapeHtml(b)).join(' > ');
-        html += '<div class="breadcrumbs">' + breadcrumbsText + '</div>';
-    }
-
-    if (doc.tags && doc.tags.length > 0) {
-        html += '<div style="margin: 1rem 0;">';
-        doc.tags.forEach(tag => {
-            html += '<span style="background: #e0e0e0; padding: 0.25rem 0.5rem; border-radius: 3px; margin-right: 0.5rem;">' +
-                    escapeHtml(tag) + '</span>';
-        });
-        html += '</div>';
-    }
-
-    html += '<hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #e0e0e0;">';
-
-    // Render content with proper newline handling
-    const rawContent = doc.content || '';
-
-    // Split by newlines, escape each line, then join with <br>
-    const lines = rawContent.split('\n');
-    const escapedLines = lines.map(line => {
-        let escaped = escapeHtml(line);
-        // Apply basic markdown after escaping
-        escaped = escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-        escaped = escaped.replace(/\*(.+?)\*/g, '<em>$1</em>');
-        escaped = escaped.replace(/`(.+?)`/g, '<code>$1</code>');
-        return escaped;
+    // Show first few categories/documents as quick links
+    const items = toc.children.slice(0, 5);
+    items.forEach(item => {
+        if (item.type === 'category' && item.children && item.children.length > 0) {
+            // Show first document from each category
+            const firstDoc = item.children.find(c => c.type === 'document');
+            if (firstDoc) {
+                html += `
+                    <li class="toc-item">
+                        <div class="toc-document" onclick='navigateToDocument("${escapeHtml(firstDoc.uri)}")'>
+                            <i class="fas fa-file-alt"></i>
+                            <span>${escapeHtml(firstDoc.name)}</span>
+                        </div>
+                    </li>
+                `;
+            }
+        } else if (item.type === 'document') {
+            html += `
+                <li class="toc-item">
+                    <div class="toc-document" onclick='navigateToDocument("${escapeHtml(item.uri)}")'>
+                        <i class="fas fa-file-alt"></i>
+                        <span>${escapeHtml(item.name)}</span>
+                    </div>
+                </li>
+            `;
+        }
     });
 
-    const content = escapedLines.join('<br>');
-
-    html += '<div>' + content + '</div>';
-    html += '</div>';
-
-    resultsDiv.innerHTML = html;
+    html += '</ul>';
+    quickToc.innerHTML = html;
 }
 
-function showLoading() {
-    document.getElementById('results').innerHTML =
-        '<div class="loading">Loading...</div>';
+// ============================================================================
+// Tags Search
+// ============================================================================
+
+async function searchByTags(tagsInput) {
+    if (!tagsInput || tagsInput.trim() === '') {
+        showEmptyState('tags-results-container', 'Please enter at least one tag', 'fas fa-tags');
+        return;
+    }
+
+    const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
+    const container = document.getElementById('tags-results-container');
+    if (!container) return;
+
+    // Show loading
+    container.innerHTML = `
+        <div class="loading-skeleton skeleton-title"></div>
+        <div class="loading-skeleton skeleton-text"></div>
+        <div class="loading-skeleton skeleton-text"></div>
+    `;
+
+    try {
+        const response = await fetch('/api/search-by-tags', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tags }),
+        });
+        const data = await response.json();
+
+        if (data.error) {
+            showErrorState(container, 'Search Error', data.error);
+            return;
+        }
+
+        if (!data.results || data.results.length === 0) {
+            showEmptyState('tags-results-container', 'No documents found with these tags', 'fas fa-tags');
+            return;
+        }
+
+        displaySearchResults(data.results, container);
+    } catch (err) {
+        showErrorState(container, 'Tag Search Failed', err.message);
+    }
 }
 
-function showNoResults() {
-    document.getElementById('results').innerHTML =
-        '<div style="text-align: center; color: #666; padding: 2rem;">No results found</div>';
+// ============================================================================
+// Document Display
+// ============================================================================
+
+async function navigateToDocument(uri) {
+    const contentArea = document.getElementById('content-area');
+
+    // Show loading
+    contentArea.innerHTML = `
+        <div class="document-container">
+            <div class="loading-skeleton skeleton-title"></div>
+            <div class="loading-skeleton skeleton-text"></div>
+            <div class="loading-skeleton skeleton-text"></div>
+            <div class="loading-skeleton skeleton-text" style="width: 80%;"></div>
+        </div>
+    `;
+
+    try {
+        const response = await fetch(`/api/document?uri=${encodeURIComponent(uri)}`);
+        const data = await response.json();
+
+        if (data.error) {
+            contentArea.innerHTML = `
+                <div class="error-state">
+                    <i class="fas fa-exclamation-circle error-icon"></i>
+                    <div class="error-content">
+                        <h3>Failed to Load Document</h3>
+                        <p>${escapeHtml(data.error)}</p>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        state.currentDocument = data;
+        displayDocument(data, contentArea);
+    } catch (err) {
+        contentArea.innerHTML = `
+            <div class="error-state">
+                <i class="fas fa-exclamation-circle error-icon"></i>
+                <div class="error-content">
+                    <h3>Failed to Load Document</h3>
+                    <p>${escapeHtml(err.message)}</p>
+                </div>
+            </div>
+        `;
+    }
 }
 
-function showError(message) {
-    document.getElementById('results').innerHTML =
-        '<div class="error">' + escapeHtml(message) + '</div>';
+function displayDocument(doc, container) {
+    // Render breadcrumbs
+    let breadcrumbsHtml = '';
+    if (doc.breadcrumbs && Array.isArray(doc.breadcrumbs) && doc.breadcrumbs.length > 0) {
+        breadcrumbsHtml = `
+            <div class="breadcrumbs">
+                <i class="fas fa-home"></i>
+                ${doc.breadcrumbs.map((crumb, idx) => `
+                    ${idx > 0 ? '<i class="fas fa-chevron-right breadcrumb-separator"></i>' : ''}
+                    <span class="breadcrumb-link">${escapeHtml(crumb)}</span>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    // Render tags
+    let tagsHtml = '';
+    if (doc.tags && doc.tags.length > 0) {
+        tagsHtml = `
+            <div class="result-tags" style="margin-bottom: 0;">
+                ${doc.tags.map(tag => `<span class="tag"><i class="fas fa-tag"></i> ${escapeHtml(tag)}</span>`).join('')}
+            </div>
+        `;
+    }
+
+    // Render markdown content using marked.js
+    let contentHtml = '';
+    if (doc.content) {
+        try {
+            // Configure marked for better rendering
+            marked.setOptions({
+                breaks: true,
+                gfm: true,
+                highlight: function(code, lang) {
+                    if (lang && hljs.getLanguage(lang)) {
+                        try {
+                            return hljs.highlight(code, { language: lang }).value;
+                        } catch (err) {
+                            console.error('Highlight error:', err);
+                        }
+                    }
+                    return hljs.highlightAuto(code).value;
+                }
+            });
+
+            contentHtml = marked.parse(doc.content);
+        } catch (err) {
+            console.error('Markdown parsing error:', err);
+            contentHtml = `<pre>${escapeHtml(doc.content)}</pre>`;
+        }
+    }
+
+    container.innerHTML = `
+        ${breadcrumbsHtml}
+
+        <div class="document-container">
+            <div class="document-header">
+                <h1 class="document-title">${escapeHtml(doc.title || 'Untitled Document')}</h1>
+                <div class="document-meta">
+                    ${doc.category ? `
+                        <div style="display: flex; align-items: center; gap: 0.375rem;">
+                            <i class="fas fa-folder"></i>
+                            <span>${escapeHtml(doc.category)}</span>
+                        </div>
+                    ` : ''}
+                    ${doc.uri ? `
+                        <div style="display: flex; align-items: center; gap: 0.375rem;">
+                            <i class="fas fa-link"></i>
+                            <code style="font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem;">${escapeHtml(doc.uri)}</code>
+                        </div>
+                    ` : ''}
+                </div>
+                ${tagsHtml}
+            </div>
+
+            <div class="document-content">
+                ${contentHtml}
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem; text-align: center;">
+            <button class="btn btn-secondary" onclick="navigateToView('toc')">
+                <i class="fas fa-arrow-left" style="margin-right: 0.5rem;"></i>
+                Back to Table of Contents
+            </button>
+        </div>
+    `;
+
+    // Apply syntax highlighting to any code blocks
+    container.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+    });
 }
+
+// ============================================================================
+// UI Helper Functions
+// ============================================================================
+
+function showEmptyState(containerId, title, icon, description = '') {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="empty-state">
+            <i class="${icon} empty-state-icon"></i>
+            <h2 class="empty-state-title">${escapeHtml(title)}</h2>
+            ${description ? `<p class="empty-state-description">${escapeHtml(description)}</p>` : ''}
+        </div>
+    `;
+}
+
+function showErrorState(container, title, message) {
+    container.innerHTML = `
+        <div class="error-state">
+            <i class="fas fa-exclamation-circle error-icon"></i>
+            <div class="error-content">
+                <h3>${escapeHtml(title)}</h3>
+                <p>${escapeHtml(message)}</p>
+            </div>
+        </div>
+    `;
+}
+
+// ============================================================================
+// Utility Functions
+// ============================================================================
+
+function escapeHtml(text) {
+    if (typeof text !== 'string') return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function truncateText(text, maxLength) {
+    if (!text) return '';
+    if (text.length <= maxLength) return escapeHtml(text);
+    return escapeHtml(text.substring(0, maxLength)) + '...';
+}
+
+// Make functions available globally for onclick handlers
+window.navigateToView = navigateToView;
+window.navigateToDocument = navigateToDocument;
+window.performSearch = performSearch;
+window.searchByTags = searchByTags;
