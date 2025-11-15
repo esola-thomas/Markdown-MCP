@@ -184,7 +184,9 @@ class DocumentationWebServer:
                 raise HTTPException(status_code=500, detail=str(e))
 
         @self.app.get("/api/navigate")
-        async def navigate_get(uri: str = Query(..., description="URI to navigate to")) -> JSONResponse:
+        async def navigate_get(
+            uri: str = Query(..., description="URI to navigate to"),
+        ) -> JSONResponse:
             """Navigate to a specific URI via GET request.
 
             Args:
@@ -227,7 +229,7 @@ class DocumentationWebServer:
 
         @self.app.get("/api/toc")
         async def table_of_contents_get(
-            max_depth: int | None = Query(None, description="Maximum depth")
+            max_depth: int | None = Query(None, description="Maximum depth"),
         ) -> JSONResponse:
             """Get table of contents via GET request.
 
@@ -294,7 +296,9 @@ class DocumentationWebServer:
                 raise HTTPException(status_code=500, detail=str(e))
 
         @self.app.get("/api/document")
-        async def get_document_get(uri: str = Query(..., description="Document URI")) -> JSONResponse:
+        async def get_document_get(
+            uri: str = Query(..., description="Document URI"),
+        ) -> JSONResponse:
             """Get document content via GET request.
 
             Args:
