@@ -56,7 +56,7 @@ Repository = "https://github.com/esola-thomas/Markdown-MCP"
 packages = ["hierarchical_docs_mcp"]
 
 [tool.setuptools.package-data]
-hierarchical_docs_mcp = ["py.typed"]
+hierarchical_docs_mcp = ["py.typed", "static/*"]
 
 [tool.ruff]
 line-length = 100
