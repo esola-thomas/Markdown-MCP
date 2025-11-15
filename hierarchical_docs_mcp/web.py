@@ -690,6 +690,13 @@ class DocumentationWebServer:
     </div>
 
     <script>
+        // Utility function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         // Load health stats on page load
         fetch('/api/health')
             .then(res => res.json())
@@ -828,17 +835,18 @@ class DocumentationWebServer:
 
             let html = '<h2 style="margin-bottom: 1.5rem;">Search Results (' + results.length + ')</h2>';
 
-            results.forEach(result => {
+            results.forEach((result, index) => {
                 if (result.error) {
-                    html += '<div class="error">' + result.error + '</div>';
+                    html += '<div class="error">' + escapeHtml(result.error) + '</div>';
                     return;
                 }
 
                 html += '<div class="result-item">';
-                html += '<div class="result-title" onclick="navigateToUri(\'' + result.uri + '\')">' +
-                        (result.title || 'Untitled') + '</div>';
+                html += '<div class="result-title" data-uri="' + escapeHtml(result.uri) +
+                        '" data-result-index="' + index + '">' +
+                        escapeHtml(result.title || 'Untitled') + '</div>';
                 if (result.breadcrumbs) {
-                    html += '<div class="breadcrumbs">' + result.breadcrumbs + '</div>';
+                    html += '<div class="breadcrumbs">' + escapeHtml(result.breadcrumbs) + '</div>';
                 }
                 if (result.excerpt) {
                     html += '<div class="excerpt">' + result.excerpt + '</div>';
@@ -851,6 +859,14 @@ class DocumentationWebServer:
             });
 
             resultsDiv.innerHTML = html;
+
+            // Add click handlers after inserting HTML
+            document.querySelectorAll('.result-title[data-uri]').forEach(el => {
+                el.style.cursor = 'pointer';
+                el.addEventListener('click', function() {
+                    navigateToUri(this.getAttribute('data-uri'));
+                });
+            });
         }
 
         function displayTableOfContents(toc) {
@@ -862,6 +878,13 @@ class DocumentationWebServer:
             html += '</ul>';
 
             resultsDiv.innerHTML = html;
+
+            // Add click handlers for documents
+            document.querySelectorAll('.toc-document[data-uri]').forEach(el => {
+                el.addEventListener('click', function() {
+                    navigateToUri(this.getAttribute('data-uri'));
+                });
+            });
         }
 
         function renderTocNode(node) {
@@ -870,7 +893,7 @@ class DocumentationWebServer:
             if (node.categories) {
                 for (const [name, category] of Object.entries(node.categories)) {
                     html += '<li class="toc-item">';
-                    html += '<div class="toc-category">' + category.label +
+                    html += '<div class="toc-category">' + escapeHtml(category.label) +
                             ' (' + category.document_count + ' docs)</div>';
 
                     if (category.categories || category.documents) {
@@ -886,8 +909,8 @@ class DocumentationWebServer:
             if (node.documents) {
                 node.documents.forEach(doc => {
                     html += '<li class="toc-item">';
-                    html += '<div class="toc-document" onclick="navigateToUri(\'' + doc.uri + '\')">' +
-                            doc.title + '</div>';
+                    html += '<div class="toc-document" data-uri="' + escapeHtml(doc.uri) + '">' +
+                            escapeHtml(doc.title) + '</div>';
                     html += '</li>';
                 });
             }
@@ -899,25 +922,26 @@ class DocumentationWebServer:
             const resultsDiv = document.getElementById('results');
 
             let html = '<div class="document-content">';
-            html += '<h1>' + doc.title + '</h1>';
+            html += '<h1>' + escapeHtml(doc.title) + '</h1>';
 
-            if (doc.breadcrumbs) {
-                html += '<div class="breadcrumbs">' + doc.breadcrumbs.join(' > ') + '</div>';
+            if (doc.breadcrumbs && Array.isArray(doc.breadcrumbs)) {
+                const breadcrumbsText = doc.breadcrumbs.map(b => escapeHtml(b)).join(' &gt; ');
+                html += '<div class="breadcrumbs">' + breadcrumbsText + '</div>';
             }
 
             if (doc.tags && doc.tags.length > 0) {
                 html += '<div style="margin: 1rem 0;">';
                 doc.tags.forEach(tag => {
                     html += '<span style="background: #e0e0e0; padding: 0.25rem 0.5rem; border-radius: 3px; margin-right: 0.5rem;">' +
-                            tag + '</span>';
+                            escapeHtml(tag) + '</span>';
                 });
                 html += '</div>';
             }
 
             html += '<hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #e0e0e0;">';
 
-            // Simple markdown rendering (basic)
-            let content = doc.content || '';
+            // Simple markdown rendering (basic) - escape first, then apply markdown
+            let content = escapeHtml(doc.content || '');
             content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             content = content.replace(/\*(.*?)\*/g, '<em>$1</em>');
             content = content.replace(/`(.*?)`/g, '<code>$1</code>');
@@ -941,7 +965,7 @@ class DocumentationWebServer:
 
         function showError(message) {
             document.getElementById('results').innerHTML =
-                '<div class="error">' + message + '</div>';
+                '<div class="error">' + escapeHtml(message) + '</div>';
         }
     </script>
 </body>
