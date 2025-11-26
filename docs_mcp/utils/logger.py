@@ -5,7 +5,7 @@ import sys
 from typing import Any
 
 # Create logger instance
-logger = logging.getLogger("hierarchical_docs_mcp")
+logger = logging.getLogger("docs_mcp")
 
 
 def setup_logging(level: str = "INFO") -> None:
