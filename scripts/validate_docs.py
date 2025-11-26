@@ -452,7 +452,9 @@ class DocumentValidator:
                     )
                 )
 
-    def _validate_links(self, file_path: Path, lines: list[str], result: ValidationResult) -> None:
+    def _validate_links(
+        self, file_path: Path, lines: list[str], result: ValidationResult
+    ) -> None:
         """Validate internal and external links."""
         link_pattern = r"\[([^\]]+)\]\(([^\)]+)\)"
 
@@ -520,7 +522,9 @@ class DocumentValidator:
                         )
                     )
 
-    def _validate_lists(self, file_path: Path, lines: list[str], result: ValidationResult) -> None:
+    def _validate_lists(
+        self, file_path: Path, lines: list[str], result: ValidationResult
+    ) -> None:
         """Validate list formatting."""
         in_code_block = False
         bullet_chars = set()
@@ -646,7 +650,9 @@ class DocumentValidator:
                 if critical:
                     report_lines.append(f"### {result.file_path}\n")
                     for issue in critical:
-                        report_lines.append(f"**Line {issue.line_number or 'N/A'}:** {issue.issue}")
+                        report_lines.append(
+                            f"**Line {issue.line_number or 'N/A'}:** {issue.issue}"
+                        )
                         if issue.current:
                             report_lines.append(f"```\nCurrent: {issue.current}\n```")
                         if issue.fix:
@@ -660,7 +666,9 @@ class DocumentValidator:
                 if warnings:
                     report_lines.append(f"### {result.file_path}\n")
                     for issue in warnings[:5]:  # Limit to 5 per file
-                        report_lines.append(f"**Line {issue.line_number or 'N/A'}:** {issue.issue}")
+                        report_lines.append(
+                            f"**Line {issue.line_number or 'N/A'}:** {issue.issue}"
+                        )
                         if issue.suggestion:
                             report_lines.append(f"*Suggestion: {issue.suggestion}*")
                         report_lines.append("")
@@ -688,7 +696,9 @@ def main():
         action="store_true",
         help="Attempt to auto-fix issues where possible (not implemented yet)",
     )
-    parser.add_argument("--no-warnings", action="store_true", help="Only report critical issues")
+    parser.add_argument(
+        "--no-warnings", action="store_true", help="Only report critical issues"
+    )
 
     args = parser.parse_args()
 
@@ -731,7 +741,9 @@ def main():
 
     # Generate report
     print("\n" + "=" * 80)
-    report = validator.generate_report(output_path=Path(args.report) if args.report else None)
+    report = validator.generate_report(
+        output_path=Path(args.report) if args.report else None
+    )
     print(report)
 
     # Exit with error if critical issues found

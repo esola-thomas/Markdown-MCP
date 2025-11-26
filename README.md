@@ -98,6 +98,72 @@ The example includes:
 
 See the [`example/README.md`](example/README.md) for detailed information about the structure and how to customize it for your project.
 
+## Web Interface
+
+The Markdown MCP server includes a built-in web interface that allows users to browse and search documentation directly in their browser, using the same tools available to AI assistants.
+
+### Accessing the Web Interface
+
+When you start the server, it automatically launches both the MCP server (for AI assistants) and a web server (for browser access):
+
+```bash
+export DOCS_ROOT=/path/to/your/docs
+hierarchical-docs-mcp
+```
+
+By default, the web interface is available at: **http://127.0.0.1:8080**
+
+Open this URL in your browser to access the documentation interface.
+
+### Features
+
+The web interface provides:
+
+- **Search Documentation**: Full-text search with relevance scoring and highlighted excerpts
+- **Table of Contents**: Browse the complete documentation hierarchy
+- **Tag-based Search**: Filter documentation by metadata tags
+- **Document Viewer**: View full document content with formatting
+- **Real-time Stats**: See the number of loaded documents and categories
+
+### Configuration
+
+You can customize the web server settings using environment variables:
+
+```bash
+# Enable/disable web server (default: true)
+export MCP_DOCS_ENABLE_WEB_SERVER=true
+
+# Web server host (default: 127.0.0.1)
+export MCP_DOCS_WEB_HOST=127.0.0.1
+
+# Web server port (default: 8080)
+export MCP_DOCS_WEB_PORT=8080
+```
+
+### API Endpoints
+
+The web interface also exposes REST API endpoints that you can use programmatically:
+
+- `GET /api/health` - Health check and statistics
+- `GET|POST /api/search` - Search documentation
+- `GET|POST /api/navigate` - Navigate to specific URIs
+- `GET|POST /api/toc` - Get table of contents
+- `POST /api/search-by-tags` - Search by tags
+- `GET|POST /api/document` - Get document content
+
+Example API usage:
+
+```bash
+# Search for documentation
+curl "http://localhost:8080/api/search?query=authentication"
+
+# Get a specific document
+curl "http://localhost:8080/api/document?uri=docs://guides/quickstart/installation"
+
+# Get table of contents
+curl "http://localhost:8080/api/toc"
+```
+
 ## Usage Examples
 
 ### Ask Your AI Assistant
@@ -175,6 +241,9 @@ See `.env.example` for all available configuration options:
 - `MCP_DOCS_CACHE_TTL`: Cache TTL in seconds (default: 3600)
 - `MCP_DOCS_OPENAPI_SPECS`: Comma-separated OpenAPI spec paths
 - `MCP_DOCS_SEARCH_LIMIT`: Maximum search results (default: 10)
+- `MCP_DOCS_ENABLE_WEB_SERVER`: Enable/disable web server (default: true)
+- `MCP_DOCS_WEB_HOST`: Web server host (default: 127.0.0.1)
+- `MCP_DOCS_WEB_PORT`: Web server port (default: 8080)
 - `LOG_LEVEL`: Logging level (default: INFO)
 
 ## Development

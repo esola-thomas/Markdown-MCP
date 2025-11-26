@@ -97,7 +97,9 @@ class TestHandleResourceRead:
         assert result["metadata"]["category"] == "guides"
 
     @pytest.mark.asyncio
-    async def test_read_document_includes_last_modified(self, sample_documents, sample_categories):
+    async def test_read_document_includes_last_modified(
+        self, sample_documents, sample_categories
+    ):
         """Test reading document includes last_modified timestamp."""
         result = await handle_resource_read(
             "docs://guides/getting-started", sample_documents, sample_categories
@@ -109,7 +111,9 @@ class TestHandleResourceRead:
     @pytest.mark.asyncio
     async def test_read_category_resource(self, sample_documents, sample_categories):
         """Test reading a category resource."""
-        result = await handle_resource_read("docs://guides", sample_documents, sample_categories)
+        result = await handle_resource_read(
+            "docs://guides", sample_documents, sample_categories
+        )
 
         assert "uri" in result
         assert result["uri"] == "docs://guides"
@@ -122,9 +126,13 @@ class TestHandleResourceRead:
         assert result["metadata"]["document_count"] == 1
 
     @pytest.mark.asyncio
-    async def test_read_category_with_subcategories(self, sample_documents, sample_categories):
+    async def test_read_category_with_subcategories(
+        self, sample_documents, sample_categories
+    ):
         """Test reading a category with subcategories."""
-        result = await handle_resource_read("docs://", sample_documents, sample_categories)
+        result = await handle_resource_read(
+            "docs://", sample_documents, sample_categories
+        )
 
         assert result["uri"] == "docs://"
         text = result["text"]
@@ -133,9 +141,13 @@ class TestHandleResourceRead:
         assert "API" in text
 
     @pytest.mark.asyncio
-    async def test_read_category_with_documents(self, sample_documents, sample_categories):
+    async def test_read_category_with_documents(
+        self, sample_documents, sample_categories
+    ):
         """Test reading a category with child documents."""
-        result = await handle_resource_read("docs://guides", sample_documents, sample_categories)
+        result = await handle_resource_read(
+            "docs://guides", sample_documents, sample_categories
+        )
 
         text = result["text"]
         assert "Documents" in text
@@ -182,9 +194,13 @@ class TestHandleResourceRead:
         assert result["metadata"]["tags"] == ["tag1", "tag2", "tag3"]
 
     @pytest.mark.asyncio
-    async def test_read_category_content_format(self, sample_documents, sample_categories):
+    async def test_read_category_content_format(
+        self, sample_documents, sample_categories
+    ):
         """Test category content is formatted correctly."""
-        result = await handle_resource_read("docs://guides", sample_documents, sample_categories)
+        result = await handle_resource_read(
+            "docs://guides", sample_documents, sample_categories
+        )
 
         text = result["text"]
         # Check markdown formatting
@@ -192,7 +208,9 @@ class TestHandleResourceRead:
         assert "**Documents**: 1" in text
 
     @pytest.mark.asyncio
-    async def test_read_category_with_both_subcategories_and_documents(self, sample_documents):
+    async def test_read_category_with_both_subcategories_and_documents(
+        self, sample_documents
+    ):
         """Test reading category with both subcategories and documents."""
         categories = {
             "docs://parent": Category(
@@ -319,7 +337,9 @@ class TestListResources:
         }
 
     @pytest.mark.asyncio
-    async def test_list_resources_includes_root(self, sample_documents, sample_categories):
+    async def test_list_resources_includes_root(
+        self, sample_documents, sample_categories
+    ):
         """Test list_resources includes root resource."""
         resources = await list_resources(sample_documents, sample_categories)
 
@@ -331,18 +351,24 @@ class TestListResources:
         assert "description" in root_resource
 
     @pytest.mark.asyncio
-    async def test_list_resources_includes_categories(self, sample_documents, sample_categories):
+    async def test_list_resources_includes_categories(
+        self, sample_documents, sample_categories
+    ):
         """Test list_resources includes all categories."""
         resources = await list_resources(sample_documents, sample_categories)
 
         category_uris = [
-            r["uri"] for r in resources if r["uri"].startswith("docs://") and r["uri"] != "docs://"
+            r["uri"]
+            for r in resources
+            if r["uri"].startswith("docs://") and r["uri"] != "docs://"
         ]
         assert "docs://guides" in category_uris
         assert "docs://api" in category_uris
 
     @pytest.mark.asyncio
-    async def test_list_resources_includes_documents(self, sample_documents, sample_categories):
+    async def test_list_resources_includes_documents(
+        self, sample_documents, sample_categories
+    ):
         """Test list_resources includes all documents."""
         resources = await list_resources(sample_documents, sample_categories)
 
@@ -351,7 +377,9 @@ class TestListResources:
         assert "docs://api/authentication" in doc_uris
 
     @pytest.mark.asyncio
-    async def test_list_resources_document_format(self, sample_documents, sample_categories):
+    async def test_list_resources_document_format(
+        self, sample_documents, sample_categories
+    ):
         """Test document resources have correct format."""
         resources = await list_resources(sample_documents, sample_categories)
 
@@ -408,11 +436,15 @@ class TestListResources:
             assert "description" in resource
 
     @pytest.mark.asyncio
-    async def test_list_resources_document_excerpt(self, sample_documents, sample_categories):
+    async def test_list_resources_document_excerpt(
+        self, sample_documents, sample_categories
+    ):
         """Test document description uses excerpt."""
         resources = await list_resources(sample_documents, sample_categories)
 
-        doc_resources = [r for r in resources if r["uri"] == "docs://guides/getting-started"]
+        doc_resources = [
+            r for r in resources if r["uri"] == "docs://guides/getting-started"
+        ]
         assert len(doc_resources) == 1
 
         # Should contain excerpt of content
