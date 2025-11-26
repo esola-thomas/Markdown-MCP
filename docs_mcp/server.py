@@ -266,7 +266,7 @@ async def serve_both(config: ServerConfig) -> None:
     """
     import uvicorn
 
-    from hierarchical_docs_mcp.web import DocumentationWebServer
+    from docs_mcp.web import DocumentationWebServer
 
     # Create and initialize MCP server
     mcp_server = DocumentationMCPServer(config)

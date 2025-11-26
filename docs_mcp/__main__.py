@@ -4,8 +4,8 @@ import asyncio
 import sys
 
 from docs_mcp.config import load_config
-from docs_mcp.server import serve
-from docs_mcp.utils.logger import setup_logging
+from docs_mcp.server import serve_both
+from docs_mcp.utils.logger import setup_logging, logger
 
 
 def main() -> None:
