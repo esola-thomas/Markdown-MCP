@@ -53,7 +53,7 @@ jobs:
 
     environment:
       name: testpypi
-      url: https://test.pypi.org/p/docs-mcp
+      url: https://test.pypi.org/p/your-docs-mcp
 
     permissions:
       id-token: write
@@ -78,7 +78,7 @@ jobs:
 
     environment:
       name: pypi
-      url: https://pypi.org/p/docs-mcp
+      url: https://pypi.org/p/your-docs-mcp
 
     permissions:
       id-token: write
