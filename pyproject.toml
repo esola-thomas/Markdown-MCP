@@ -54,8 +54,9 @@ docs-mcp = "docs_mcp.__main__:main"
 Homepage = "https://github.com/esola-thomas/Markdown-MCP"
 Repository = "https://github.com/esola-thomas/Markdown-MCP"
 
-[tool.setuptools]
-packages = ["docs_mcp"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["docs_mcp*"]
 
 [tool.setuptools.package-data]
 docs_mcp = ["py.typed", "static/*"]

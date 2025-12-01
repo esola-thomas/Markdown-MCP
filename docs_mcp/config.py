@@ -75,7 +75,7 @@ class ServerConfig(BaseSettings):
     # Web server configuration
     enable_web_server: bool = True
     web_host: str = "127.0.0.1"
-    web_port: int = 8080
+    web_port: int = 8123
 
     @field_validator("docs_root")
     @classmethod

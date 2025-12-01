@@ -111,7 +111,7 @@ export DOCS_ROOT=/path/to/your/docs
 hierarchical-docs-mcp
 ```
 
-By default, the web interface is available at: **http://127.0.0.1:8080**
+By default, the web interface is available at: **http://127.0.0.1:8123**
 
 Open this URL in your browser to access the documentation interface.
 
@@ -136,8 +136,8 @@ export MCP_DOCS_ENABLE_WEB_SERVER=true
 # Web server host (default: 127.0.0.1)
 export MCP_DOCS_WEB_HOST=127.0.0.1
 
-# Web server port (default: 8080)
-export MCP_DOCS_WEB_PORT=8080
+# Web server port (default: 8123)
+export MCP_DOCS_WEB_PORT=8123
 ```
 
 ### API Endpoints
@@ -155,13 +155,13 @@ Example API usage:
 
 ```bash
 # Search for documentation
-curl "http://localhost:8080/api/search?query=authentication"
+curl "http://localhost:8123/api/search?query=authentication"
 
 # Get a specific document
-curl "http://localhost:8080/api/document?uri=docs://guides/quickstart/installation"
+curl "http://localhost:8123/api/document?uri=docs://guides/quickstart/installation"
 
 # Get table of contents
-curl "http://localhost:8080/api/toc"
+curl "http://localhost:8123/api/toc"
 ```
 
 ## Usage Examples
@@ -243,7 +243,7 @@ See `.env.example` for all available configuration options:
 - `MCP_DOCS_SEARCH_LIMIT`: Maximum search results (default: 10)
 - `MCP_DOCS_ENABLE_WEB_SERVER`: Enable/disable web server (default: true)
 - `MCP_DOCS_WEB_HOST`: Web server host (default: 127.0.0.1)
-- `MCP_DOCS_WEB_PORT`: Web server port (default: 8080)
+- `MCP_DOCS_WEB_PORT`: Web server port (default: 8123)
 - `LOG_LEVEL`: Logging level (default: INFO)
 
 ## Development

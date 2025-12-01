@@ -598,8 +598,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-EXPOSE 8080
-CMD ["uvicorn", "docs_mcp.http_server:app", "--host", "0.0.0.0", "--port", "8080"]
+EXPOSE 8123
+CMD ["uvicorn", "docs_mcp.http_server:app", "--host", "0.0.0.0", "--port", "8123"]
 ```
 
 Deploy to cloud platforms (AWS, Azure, GCP) for team-wide access via HTTP transport.

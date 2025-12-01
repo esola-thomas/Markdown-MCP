@@ -264,7 +264,7 @@ hierarchical-docs-mcp serve [OPTIONS] PATH
 
 | Option | Description |
 |--------|-------------|
-| `--port PORT` | Server port (default: 8080) |
+| `--port PORT` | Server port (default: 8123) |
 | `--watch` | Enable file watching and live reload |
 | `--open` | Open browser automatically |
 
@@ -360,7 +360,7 @@ export MCP_DOCS_SEARCH_LIMIT=10
 export LOG_LEVEL=INFO
 
 # Server settings
-export MCP_DOCS_PORT=8080
+export MCP_DOCS_PORT=8123
 ```
 
 ## Configuration File
