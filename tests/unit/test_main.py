@@ -35,9 +35,7 @@ class TestMain:
         # Mock functions to avoid actually starting the server
         with patch("docs_mcp.__main__.load_config", return_value=mock_config):
             with patch("docs_mcp.__main__.setup_logging"):
-                with patch(
-                    "docs_mcp.__main__.serve", new_callable=AsyncMock
-                ) as mock_serve:
+                with patch("docs_mcp.__main__.serve", new_callable=AsyncMock) as mock_serve:
                     try:
                         main()
                     except SystemExit:
@@ -112,9 +110,7 @@ class TestMain:
 
         mock_config = ServerConfig(docs_root=str(docs_dir))
 
-        with patch(
-            "docs_mcp.__main__.load_config", return_value=mock_config
-        ) as mock_load:
+        with patch("docs_mcp.__main__.load_config", return_value=mock_config) as mock_load:
             with patch("docs_mcp.__main__.setup_logging"):
                 with patch("docs_mcp.__main__.serve", new_callable=AsyncMock):
                     try:
