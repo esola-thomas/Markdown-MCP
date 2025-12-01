@@ -27,7 +27,7 @@ class DocumentationMCPServer:
             config: Server configuration
         """
         self.config = config
-        self.server = Server("hierarchical-docs-mcp")
+        self.server = Server("docs_mcp")
         self.documents: list[Document] = []
         self.categories: dict[str, Category] = {}
 

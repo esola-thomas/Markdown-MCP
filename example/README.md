@@ -94,7 +94,7 @@ To test this example with the MCP server:
 
 2. Start the MCP server:
    ```bash
-   hierarchical-docs-mcp
+   docs_mcp
    ```
 
 3. Ask your AI assistant:

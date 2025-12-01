@@ -14,7 +14,7 @@ This guide will help you set up and configure the Hierarchical Documentation MCP
 Install the package using pip:
 
 ```bash
-pip install hierarchical-docs-mcp
+pip install docs_mcp
 ```
 
 Or install from source:
@@ -36,7 +36,7 @@ export DOCS_ROOT=/path/to/your/docs
 2. Start the MCP server:
 
 ```bash
-hierarchical-docs-mcp
+docs_mcp
 ```
 
 3. Configure your AI assistant to connect to the server (see platform-specific guides below).

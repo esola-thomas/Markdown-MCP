@@ -24,7 +24,7 @@ Before you begin, ensure you have the following installed:
 The easiest way to install is using pip:
 
 ```bash
-pip install hierarchical-docs-mcp
+pip install docs_mcp
 ```
 
 ### Method 2: Install from Source
@@ -45,7 +45,7 @@ pip install -e .
 After installation, verify it works:
 
 ```bash
-hierarchical-docs-mcp --version
+docs_mcp --version
 ```
 
 You should see the version number displayed.
@@ -65,7 +65,7 @@ Now that you've installed the application, check out:
 **Permission denied error**
 ```bash
 # Use --user flag to install in user directory
-pip install --user hierarchical-docs-mcp
+pip install --user docs_mcp
 ```
 
 **Python version too old**

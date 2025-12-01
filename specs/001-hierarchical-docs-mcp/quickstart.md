@@ -32,21 +32,21 @@ The Hierarchical Documentation MCP Server enables AI assistants (Claude Desktop,
 ### Option 1: Install from PyPI (when published)
 
 ```bash
-pip install hierarchical-docs-mcp
+pip install docs_mcp
 ```
 
 ### Option 2: Install from source
 
 ```bash
-git clone https://github.com/your-org/hierarchical-docs-mcp
-cd hierarchical-docs-mcp
+git clone https://github.com/your-org/docs_mcp
+cd docs_mcp
 pip install -e .
 ```
 
 ### Option 3: Use with pipx (isolated environment)
 
 ```bash
-pipx install hierarchical-docs-mcp
+pipx install docs_mcp
 ```
 
 ---
@@ -429,7 +429,7 @@ Test MCP integration in CI:
 # .github/workflows/docs-mcp.yml
 - name: Test MCP Server
   run: |
-    pip install hierarchical-docs-mcp pytest
+    pip install docs_mcp pytest
     pytest tests/integration/test_mcp_protocol.py
 ```
 
@@ -437,9 +437,9 @@ Test MCP integration in CI:
 
 ## Support & Resources
 
-- **Documentation**: https://github.com/your-org/hierarchical-docs-mcp/docs
-- **Issues**: https://github.com/your-org/hierarchical-docs-mcp/issues
-- **Examples**: https://github.com/your-org/hierarchical-docs-mcp/examples
+- **Documentation**: https://github.com/your-org/docs_mcp/docs
+- **Issues**: https://github.com/your-org/docs_mcp/issues
+- **Examples**: https://github.com/your-org/docs_mcp/examples
 - **MCP Specification**: https://spec.modelcontextprotocol.io
 
 ---
@@ -468,7 +468,7 @@ A: Yes, fully offline capable when using local documentation with stdio transpor
 
 ## Quickstart Summary
 
-1. ✅ Install: `pip install hierarchical-docs-mcp`
+1. ✅ Install: `pip install docs_mcp`
 2. ✅ Configure: Add to Claude Desktop or VS Code config
 3. ✅ Set `DOCS_ROOT` environment variable
 4. ✅ Restart AI assistant

@@ -1,7 +1,7 @@
 # Implementation Plan: Hierarchical Documentation MCP Server
 
-**Branch**: `001-hierarchical-docs-mcp` | **Date**: November 4, 2025 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `/specs/001-hierarchical-docs-mcp/spec.md`
+**Branch**: `001-docs_mcp` | **Date**: November 4, 2025 | **Spec**: [spec.md](./spec.md)
+**Input**: Feature specification from `/specs/001-docs_mcp/spec.md`
 
 **Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
@@ -81,7 +81,7 @@ Design review confirms continued compliance:
 ### Documentation (this feature)
 
 ```text
-specs/001-hierarchical-docs-mcp/
+specs/001-docs_mcp/
 ├── plan.md              # This file (/speckit.plan command output)
 ├── spec.md              # Feature specification (completed)
 ├── research.md          # Phase 0 output (created by /speckit.plan)

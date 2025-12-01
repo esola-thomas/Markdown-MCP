@@ -19,7 +19,7 @@ A Model Context Protocol (MCP) server that enables AI assistants to navigate and
 
 ```bash
 # Install from PyPI (when published)
-pip install hierarchical-docs-mcp
+pip install docs_mcp
 
 # Or install from source
 git clone https://github.com/esola-thomas/Markdown-MCP
@@ -38,7 +38,7 @@ export DOCS_ROOT=/path/to/your/docs
 2. Start the MCP server:
 
 ```bash
-hierarchical-docs-mcp
+docs_mcp
 ```
 
 ### Claude Desktop Configuration
@@ -49,7 +49,7 @@ Add to your Claude Desktop configuration file (`~/Library/Application Support/Cl
 {
   "mcpServers": {
     "docs": {
-      "command": "hierarchical-docs-mcp",
+      "command": "docs_mcp",
       "env": {
         "DOCS_ROOT": "/absolute/path/to/your/docs"
       }
@@ -66,7 +66,7 @@ Create `.vscode/mcp.json` in your workspace:
 {
   "servers": {
     "docs": {
-      "command": "hierarchical-docs-mcp",
+      "command": "docs_mcp",
       "env": {
         "DOCS_ROOT": "${workspaceFolder}/docs"
       }
@@ -86,7 +86,7 @@ This repository includes a complete example documentation structure in the [`exa
 export DOCS_ROOT=/path/to/Markdown-MCP/example
 
 # Start the server
-hierarchical-docs-mcp
+docs_mcp
 ```
 
 The example includes:
@@ -108,7 +108,7 @@ When you start the server, it automatically launches both the MCP server (for AI
 
 ```bash
 export DOCS_ROOT=/path/to/your/docs
-hierarchical-docs-mcp
+docs_mcp
 ```
 
 By default, the web interface is available at: **http://127.0.0.1:8080**

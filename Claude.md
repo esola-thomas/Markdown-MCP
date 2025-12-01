@@ -448,7 +448,7 @@ def sanitize_openapi_description(desc: str) -> str:
   "mcpServers": {
     "hierarchical-docs": {
       "command": "npx",
-      "args": ["-y", "@your-org/hierarchical-docs-mcp"],
+      "args": ["-y", "@your-org/docs_mcp"],
       "env": {
         "DOCS_ROOT": "/path/to/docs"
       }
@@ -463,7 +463,7 @@ def sanitize_openapi_description(desc: str) -> str:
   "servers": {
     "hierarchical-docs": {
       "command": "npx",
-      "args": ["-y", "@your-org/hierarchical-docs-mcp"],
+      "args": ["-y", "@your-org/docs_mcp"],
       "env": {
         "DOCS_ROOT": "${workspaceFolder}/docs"
       }
@@ -517,7 +517,7 @@ This hybrid approach ensures core functionality works universally while providin
 ### Development Setup
 
 **Local testing with Claude Desktop:**
-1. Install server: `npm install -g @your-org/hierarchical-docs-mcp`
+1. Install server: `npm install -g @your-org/docs_mcp`
 2. Configure Claude Desktop (see config above)
 3. Restart Claude Desktop
 4. Test with: "List all documentation categories"
@@ -529,7 +529,7 @@ This hybrid approach ensures core functionality works universally while providin
 
 **MCP Inspector for debugging:**
 ```bash
-npx @modelcontextprotocol/inspector npx -y @your-org/hierarchical-docs-mcp
+npx @modelcontextprotocol/inspector npx -y @your-org/docs_mcp
 ```
 
 Opens web UI to interactively test tools, view JSON-RPC messages, and debug errors.
@@ -541,11 +541,11 @@ Opens web UI to interactively test tools, view JSON-RPC messages, and debug erro
 Package.json:
 ```json
 {
-  "name": "@your-org/hierarchical-docs-mcp",
+  "name": "@your-org/docs_mcp",
   "version": "1.0.0",
   "type": "module",
   "bin": {
-    "hierarchical-docs-mcp": "./build/index.js"
+    "docs_mcp": "./build/index.js"
   },
   "files": ["build", "README.md"],
   "scripts": {
@@ -559,14 +559,14 @@ Package.json:
 }
 ```
 
-Users install with: `npm install -g @your-org/hierarchical-docs-mcp`
+Users install with: `npm install -g @your-org/docs_mcp`
 
 **Option 2: Python Package (PyPI)**
 
 pyproject.toml:
 ```toml
 [project]
-name = "hierarchical-docs-mcp"
+name = "docs_mcp"
 version = "1.0.0"
 dependencies = [
     "mcp[cli]>=1.0.0",
@@ -575,10 +575,10 @@ dependencies = [
 ]
 
 [project.scripts]
-hierarchical-docs-mcp = "hierarchical_docs_mcp.main:main"
+docs_mcp = "hierarchical_docs_mcp.main:main"
 ```
 
-Users install with: `uvx hierarchical-docs-mcp` or `pip install hierarchical-docs-mcp`
+Users install with: `uvx docs_mcp` or `pip install docs_mcp`
 
 **Option 3: Desktop Extension (.mcpb)**
 
@@ -586,7 +586,7 @@ One-click installation for Claude Desktop users:
 ```bash
 npm install -g @anthropic-ai/mcpb
 mcpb pack
-# Distributes: hierarchical-docs-mcp.mcpb
+# Distributes: docs_mcp.mcpb
 ```
 
 **Option 4: Docker (for remote deployment)**
@@ -616,7 +616,7 @@ GitHub maintains an official registry for verified MCP servers:
 
 **Recommended organization for TypeScript:**
 ```
-hierarchical-docs-mcp/
+docs_mcp/
 ├── src/
 │   ├── index.ts                 # Entry point
 │   ├── server.ts                # Server initialization

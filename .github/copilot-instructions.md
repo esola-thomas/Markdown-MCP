@@ -6,7 +6,7 @@ Auto-generated from all feature plans. Last updated: 2025-11-13
 
 ## Active Technologies
 
-- Python 3.11+ (for MCP SDK compatibility and modern async features) (001-hierarchical-docs-mcp)
+- Python 3.11+ (for MCP SDK compatibility and modern async features) (001-docs_mcp)
 
 ## Project Structure
 
@@ -27,7 +27,7 @@ Python 3.11+ (for MCP SDK compatibility and modern async features): Follow stand
 - 002-test-coverage: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 
 - 2025-11-13: Established project constitution v1.0.0 with 5 core principles
-- 001-hierarchical-docs-mcp: Added Python 3.11+ (for MCP SDK compatibility and modern async features)
+- 001-docs_mcp: Added Python 3.11+ (for MCP SDK compatibility and modern async features)
 
 ## Development Principles
 

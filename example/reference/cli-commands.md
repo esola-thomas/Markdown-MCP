@@ -14,7 +14,7 @@ Complete reference for all command-line interface commands.
 Ensure the CLI is installed:
 
 ```bash
-pip install hierarchical-docs-mcp
+pip install docs_mcp
 ```
 
 ## Global Options
@@ -38,7 +38,7 @@ Start the MCP server.
 **Usage:**
 
 ```bash
-hierarchical-docs-mcp [OPTIONS]
+docs_mcp [OPTIONS]
 ```
 
 **Options:**
@@ -54,16 +54,16 @@ hierarchical-docs-mcp [OPTIONS]
 
 ```bash
 # Start with default settings
-hierarchical-docs-mcp
+docs_mcp
 
 # Specify docs root
-hierarchical-docs-mcp --docs-root /path/to/docs
+docs_mcp --docs-root /path/to/docs
 
 # Enable debug logging
-hierarchical-docs-mcp --log-level DEBUG
+docs_mcp --log-level DEBUG
 
 # Use custom config file
-hierarchical-docs-mcp --config /path/to/.mcp-docs.yaml
+docs_mcp --config /path/to/.mcp-docs.yaml
 ```
 
 ## validate
@@ -73,7 +73,7 @@ Validate documentation structure and metadata.
 **Usage:**
 
 ```bash
-hierarchical-docs-mcp validate [OPTIONS] PATH
+docs_mcp validate [OPTIONS] PATH
 ```
 
 **Options:**
@@ -88,13 +88,13 @@ hierarchical-docs-mcp validate [OPTIONS] PATH
 
 ```bash
 # Validate documentation
-hierarchical-docs-mcp validate /path/to/docs
+docs_mcp validate /path/to/docs
 
 # Strict validation with JSON output
-hierarchical-docs-mcp validate --strict --format json /path/to/docs
+docs_mcp validate --strict --format json /path/to/docs
 
 # Check for broken links
-hierarchical-docs-mcp validate --check-links /path/to/docs
+docs_mcp validate --check-links /path/to/docs
 ```
 
 **Output:**
@@ -122,7 +122,7 @@ Build or rebuild the search index.
 **Usage:**
 
 ```bash
-hierarchical-docs-mcp index [OPTIONS] PATH
+docs_mcp index [OPTIONS] PATH
 ```
 
 **Options:**
@@ -136,10 +136,10 @@ hierarchical-docs-mcp index [OPTIONS] PATH
 
 ```bash
 # Build index
-hierarchical-docs-mcp index /path/to/docs
+docs_mcp index /path/to/docs
 
 # Rebuild and optimize
-hierarchical-docs-mcp index --rebuild --optimize /path/to/docs
+docs_mcp index --rebuild --optimize /path/to/docs
 ```
 
 ## search
@@ -149,7 +149,7 @@ Search documentation from the command line.
 **Usage:**
 
 ```bash
-hierarchical-docs-mcp search [OPTIONS] QUERY
+docs_mcp search [OPTIONS] QUERY
 ```
 
 **Options:**
@@ -166,13 +166,13 @@ hierarchical-docs-mcp search [OPTIONS] QUERY
 
 ```bash
 # Simple search
-hierarchical-docs-mcp search "authentication"
+docs_mcp search "authentication"
 
 # Search with filters
-hierarchical-docs-mcp search "API" --category api --limit 5
+docs_mcp search "API" --category api --limit 5
 
 # JSON output
-hierarchical-docs-mcp search "setup" --format json
+docs_mcp search "setup" --format json
 ```
 
 **Output:**
@@ -202,7 +202,7 @@ Show documentation statistics.
 **Usage:**
 
 ```bash
-hierarchical-docs-mcp stats [OPTIONS] PATH
+docs_mcp stats [OPTIONS] PATH
 ```
 
 **Options:**
@@ -216,10 +216,10 @@ hierarchical-docs-mcp stats [OPTIONS] PATH
 
 ```bash
 # Basic statistics
-hierarchical-docs-mcp stats /path/to/docs
+docs_mcp stats /path/to/docs
 
 # Detailed JSON output
-hierarchical-docs-mcp stats --detailed --format json /path/to/docs
+docs_mcp stats --detailed --format json /path/to/docs
 ```
 
 **Output:**
@@ -257,7 +257,7 @@ Start a development server with live reload.
 **Usage:**
 
 ```bash
-hierarchical-docs-mcp serve [OPTIONS] PATH
+docs_mcp serve [OPTIONS] PATH
 ```
 
 **Options:**
@@ -272,10 +272,10 @@ hierarchical-docs-mcp serve [OPTIONS] PATH
 
 ```bash
 # Start development server
-hierarchical-docs-mcp serve /path/to/docs
+docs_mcp serve /path/to/docs
 
 # With live reload on custom port
-hierarchical-docs-mcp serve --watch --port 3000 /path/to/docs
+docs_mcp serve --watch --port 3000 /path/to/docs
 ```
 
 ## export
@@ -285,7 +285,7 @@ Export documentation in various formats.
 **Usage:**
 
 ```bash
-hierarchical-docs-mcp export [OPTIONS] PATH OUTPUT
+docs_mcp export [OPTIONS] PATH OUTPUT
 ```
 
 **Options:**
@@ -300,14 +300,14 @@ hierarchical-docs-mcp export [OPTIONS] PATH OUTPUT
 
 ```bash
 # Export as JSON
-hierarchical-docs-mcp export /path/to/docs ./output.json
+docs_mcp export /path/to/docs ./output.json
 
 # Export as HTML with metadata
-hierarchical-docs-mcp export --format html --include-metadata \
+docs_mcp export --format html --include-metadata \
   /path/to/docs ./output.html
 
 # Export and compress
-hierarchical-docs-mcp export --compress /path/to/docs ./docs.tar.gz
+docs_mcp export --compress /path/to/docs ./docs.tar.gz
 ```
 
 ## config
@@ -317,7 +317,7 @@ Manage configuration.
 **Usage:**
 
 ```bash
-hierarchical-docs-mcp config [SUBCOMMAND]
+docs_mcp config [SUBCOMMAND]
 ```
 
 **Subcommands:**
@@ -332,13 +332,13 @@ hierarchical-docs-mcp config [SUBCOMMAND]
 
 ```bash
 # Show current config
-hierarchical-docs-mcp config show
+docs_mcp config show
 
 # Create default config
-hierarchical-docs-mcp config init
+docs_mcp config init
 
 # Validate config file
-hierarchical-docs-mcp config validate .mcp-docs.yaml
+docs_mcp config validate .mcp-docs.yaml
 ```
 
 ## Environment Variables
@@ -407,32 +407,32 @@ logging:
 
 ```bash
 # Verify installation
-pip show hierarchical-docs-mcp
+pip show docs_mcp
 
 # Check PATH
-which hierarchical-docs-mcp
+which docs_mcp
 ```
 
 ## Permission denied
 
 ```bash
 # Install with --user flag
-pip install --user hierarchical-docs-mcp
+pip install --user docs_mcp
 
 # Or use virtual environment
 python -m venv venv
 source venv/bin/activate
-pip install hierarchical-docs-mcp
+pip install docs_mcp
 ```
 
 ## Configuration errors
 
 ```bash
 # Validate config
-hierarchical-docs-mcp config validate
+docs_mcp config validate
 
 # Show current config
-hierarchical-docs-mcp config show --verbose
+docs_mcp config show --verbose
 ```
 
 ## Getting Help
@@ -440,7 +440,7 @@ hierarchical-docs-mcp config show --verbose
 For detailed help on any command:
 
 ```bash
-hierarchical-docs-mcp COMMAND --help
+docs_mcp COMMAND --help
 ```
 
 ## Next Steps

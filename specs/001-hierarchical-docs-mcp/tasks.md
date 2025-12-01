@@ -1,6 +1,6 @@
 # Tasks: Hierarchical Documentation MCP Server
 
-**Input**: Design documents from `/specs/001-hierarchical-docs-mcp/`
+**Input**: Design documents from `/specs/001-docs_mcp/`
 **Prerequisites**: plan.md (complete), spec.md (complete), research.md (complete), data-model.md (complete), contracts/ (complete)
 
 **Tests**: This project follows TDD per constitution - tests are written first and must fail before implementation.

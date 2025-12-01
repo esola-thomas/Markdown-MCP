@@ -108,7 +108,7 @@ Track common query times:
 export LOG_LEVEL=DEBUG
 
 # Monitor response times in logs
-hierarchical-docs-mcp
+docs_mcp
 ```
 
 ## Performance Metrics
@@ -171,7 +171,7 @@ Enable detailed logging to identify bottlenecks:
 
 ```bash
 export LOG_LEVEL=DEBUG
-hierarchical-docs-mcp 2>&1 | grep -E "duration|time|cache"
+docs_mcp 2>&1 | grep -E "duration|time|cache"
 ```
 
 ## Next Steps

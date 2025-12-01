@@ -1,6 +1,6 @@
 # Feature Specification: Hierarchical Documentation MCP Server
 
-**Feature Branch**: `001-hierarchical-docs-mcp` / `claude/implement-hierarchical-docs-mcp-011CUqoydciBozvwg4x1hqzD`
+**Feature Branch**: `001-docs_mcp` / `claude/implement-docs_mcp-011CUqoydciBozvwg4x1hqzD`
 **Created**: November 4, 2025
 **Status**: In Development - MVP Phase Complete (User Story 1)
 **Last Updated**: November 6, 2025

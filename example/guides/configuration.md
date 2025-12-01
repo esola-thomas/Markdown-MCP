@@ -102,7 +102,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 {
   "mcpServers": {
     "docs": {
-      "command": "hierarchical-docs-mcp",
+      "command": "docs_mcp",
       "env": {
         "DOCS_ROOT": "/absolute/path/to/your/docs",
         "LOG_LEVEL": "INFO"
@@ -120,7 +120,7 @@ Create `.vscode/mcp.json` in your workspace:
 {
   "servers": {
     "docs": {
-      "command": "hierarchical-docs-mcp",
+      "command": "docs_mcp",
       "env": {
         "DOCS_ROOT": "${workspaceFolder}/docs",
         "MCP_DOCS_CACHE_TTL": "3600"
@@ -136,7 +136,7 @@ After configuring, test that everything works:
 
 ```bash
 # Start the server
-hierarchical-docs-mcp
+docs_mcp
 
 # Check logs for any errors
 # The server should report the DOCS_ROOT path and number of documents loaded

@@ -35,7 +35,7 @@ class TestDocumentationMCPServer:
         from mcp.server import Server
 
         assert isinstance(server.server, Server)
-        assert server.server.name == "hierarchical-docs-mcp"
+        assert server.server.name == "docs_mcp"
 
     @pytest.mark.asyncio
     async def test_initialize_loads_documents(self, tmp_path):

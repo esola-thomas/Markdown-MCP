@@ -255,7 +255,7 @@ For configuration files, show complete working examples:
 {
   "mcpServers": {
     "hierarchical-docs": {
-      "command": "hierarchical-docs-mcp",
+      "command": "docs_mcp",
       "args": ["--docs-root", "/path/to/docs"]
     }
   }
@@ -269,8 +269,8 @@ Show commands with prompt prefix `$`:
 
 ```markdown
 ​```bash
-$ pip install hierarchical-docs-mcp
-$ hierarchical-docs-mcp --help
+$ pip install docs_mcp
+$ docs_mcp --help
 ​```
 ```
 
@@ -422,13 +422,13 @@ Before you begin, ensure you have:
 ### Step 1: Install the package
 
 ​```bash
-$ pip install hierarchical-docs-mcp
+$ pip install docs_mcp
 ​```
 
 ### Step 2: Verify installation
 
 ​```bash
-$ hierarchical-docs-mcp --version
+$ docs_mcp --version
 ​```
 
 ## Configuration
